@@ -43,17 +43,6 @@ export default function Home() {
       }
     };
 
-    const getTeamStats = async () => {
-      try {
-        const response = await axios.get("/api/proxy/teamStats/"); // calls API
-        //setTeamStats(response.data);
-        console.log(response.data);
-      } catch (err) {
-        console.error("Error fetching team names:", err);
-      }
-    };
-
-    getTeamStats();
     getTeamNames();
   }, []);
 
@@ -62,9 +51,20 @@ export default function Home() {
     const teamName = e.target.value;
     setTeam(teamName);
 
+    // Tracks whichever team is selected in the dropdown
     const selectedTeamObj = teamNames.find(
       (teamObj) => teamObj.name === teamName,
     );
+
+    // Sends the Team ID to the backend, specifically to api/proxy/teamStats
+    axios
+      .post("/api/proxy/teamStats", { teamID: selectedTeamObj.id })
+      .then((response) => {
+        console.log("Team stats fetched successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching team stats:", error);
+      });
   };
 
   const handleClick = () => {
