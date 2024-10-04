@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 
+/*
+This GET request fetches the list of teams from the API
+
+headers: needed to properly fetch from the API server
+apiKey: our secret API key to communicate with sports radar
+teamListResponse: raw JSON data from API
+teams: gets only what we need from the team list, this is not to be confused with the filter we do on the front-end
+*/
 export async function GET() {
   try {
     const headers = {
