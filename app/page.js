@@ -17,25 +17,28 @@ These are the imported data sets that we manually created:
 
 nbaTeams: List of teams to filter out the weird teams that the API returns
 createData: Not implemented yet, but these are the columns of the table that will be returned for out team stats
+yearList: List of years
 */
 import { nbaTeams } from "./data/teams";
 import { createData } from "./data/tableStuff";
+import { yearList } from "./data/years";
 
 export default function Home() {
   // STATES
   const [team, setTeam] = useState("");
   const [teamNames, setTeamNames] = useState([]);
+  const [year, setYear] = useState("");
+  const [yearNumbers, setYearNumbers] = useState([]);
   const [open, setOpen] = useState(false);
-  const [teamStats, setTeamStats] = useState([]);
 
   // API stuff, everything happening here is in unison with the route.js files in the app/api/proxy folder
   useEffect(() => {
     const getTeamNames = async () => {
       try {
-        const response = await axios.get("/api/proxy/teamNames/"); // calls API
+        const response = await axios.get("/api/proxy/teamNames/");
 
         const filteredTeams = response.data.filter((team) =>
-          nbaTeams.includes(team.market),
+          nbaTeams.includes(team.market)
         );
         setTeamNames(filteredTeams);
       } catch (err) {
@@ -43,17 +46,22 @@ export default function Home() {
       }
     };
 
+    const getYearNumbers = async () => {
+      setYearNumbers(yearList);
+    };
+
+    getYearNumbers();
     getTeamNames();
   }, []);
 
   // FUNCTIONS
-  const handleChange = (e) => {
+  const handleTeamChange = (e) => {
     const teamName = e.target.value;
     setTeam(teamName);
 
     // Tracks whichever team is selected in the dropdown
     const selectedTeamObj = teamNames.find(
-      (teamObj) => teamObj.name === teamName,
+      (teamObj) => teamObj.name === teamName
     );
 
     // Sends the Team ID to the backend, specifically to api/proxy/teamStats
@@ -65,6 +73,17 @@ export default function Home() {
       .catch((error) => {
         console.error("Error fetching team stats:", error);
       });
+  };
+
+  const handleYearChange = (e) => {
+    const yearNumber = e.target.value;
+    setYear(yearNumber);
+
+    const selectedYearObj = yearNumbers.find(
+      (yearObj) => yearObj === yearNumber
+    );
+
+    console.log(selectedYearObj);
   };
 
   const handleClick = () => {
@@ -79,17 +98,17 @@ export default function Home() {
         alignItems: "center",
       }}
     >
-      <Typography variant="h1">Season Snapshot</Typography>
+      <Typography variant='h1'>Season Snapshot</Typography>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <FormControl sx={{ m: 1, minWidth: 80 }}>
-          <InputLabel id="team-select-label">Team</InputLabel>
+          <InputLabel id='team-select-label'>Team</InputLabel>
           <Select
-            labelId="team-select-label"
-            id="team-select"
+            labelId='team-select-label'
+            id='team-select'
             value={team}
-            onChange={handleChange}
+            onChange={handleTeamChange}
             autoWidth
-            label="Team"
+            label='Team'
           >
             {teamNames.map((teamObj) => (
               <MenuItem key={teamObj.id} value={teamObj.name}>
@@ -99,9 +118,27 @@ export default function Home() {
           </Select>
         </FormControl>
 
+        <FormControl sx={{ m: 1, minWidth: 80 }}>
+          <InputLabel id='year-select-label'>Year</InputLabel>
+          <Select
+            labelId='year-select-label'
+            id='year-select'
+            value={year}
+            onChange={handleYearChange}
+            autoWidth
+            label='Years'
+          >
+            {yearNumbers.map((yearObj) => (
+              <MenuItem key={yearObj} value={yearObj}>
+                {yearObj}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <Button
-          variant="contained"
-          size="small"
+          variant='contained'
+          size='small'
           disableElevation
           onClick={handleClick}
         >
@@ -115,11 +152,11 @@ export default function Home() {
           p={2}
           border={1}
           borderRadius={8}
-          borderColor="grey.300"
-          bgcolor="grey.100"
+          borderColor='grey.300'
+          bgcolor='grey.100'
           height={1000} // Fixed height
           width={1000} // Fixed width
-          overflow="auto" // Scrollable content
+          overflow='auto' // Scrollable content
         ></Box>
       )}
     </div>
