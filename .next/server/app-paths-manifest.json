@@ -1,5 +1,3 @@
 {
-  "/page": "app/page.js",
-  "/api/proxy/teamNames/route": "app/api/proxy/teamNames/route.js",
-  "/api/proxy/teamStats/route": "app/api/proxy/teamStats/route.js"
+  "/page": "app/page.js"
 }

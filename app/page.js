@@ -12,6 +12,12 @@ import {
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+/*
+These are the imported data sets that we manually created:
+
+nbaTeams: List of teams to filter out the weird teams that the API returns
+createData: Not implemented yet, but these are the columns of the table that will be returned for out team stats
+*/
 import { nbaTeams } from "./data/teams";
 import { createData } from "./data/tableStuff";
 
@@ -21,7 +27,8 @@ export default function Home() {
   const [teamNames, setTeamNames] = useState([]);
   const [open, setOpen] = useState(false);
   const [teamStats, setTeamStats] = useState([]);
-  // API stuff
+
+  // API stuff, everything happening here is in unison with the route.js files in the app/api/proxy folder
   useEffect(() => {
     const getTeamNames = async () => {
       try {
@@ -31,7 +38,6 @@ export default function Home() {
           nbaTeams.includes(team.market),
         );
         setTeamNames(filteredTeams);
-        //console.log(filteredTeams);
       } catch (err) {
         console.error("Error fetching team names:", err);
       }
@@ -46,6 +52,7 @@ export default function Home() {
         console.error("Error fetching team names:", err);
       }
     };
+
     getTeamStats();
     getTeamNames();
   }, []);
