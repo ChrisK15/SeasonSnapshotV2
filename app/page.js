@@ -59,7 +59,12 @@ export default function Home() {
 
   // FUNCTIONS
   const handleChange = (e) => {
-    setTeam(e.target.value);
+    const teamName = e.target.value;
+    setTeam(teamName);
+
+    const selectedTeamObj = teamNames.find(
+      (teamObj) => teamObj.name === teamName,
+    );
   };
 
   const handleClick = () => {
