@@ -16,14 +16,14 @@ export async function POST(req) {
       accept: "application/json",
     };
 
-    const { teamID } = await req.json();
+    const { teamID, year } = await req.json();
 
     const apiKey = process.env.SPORTS_RADAR_API_KEY;
 
     // TEAM STATS
     const teamStatsResponse = await axios.get(
-      `https://api.sportradar.com/nba/trial/v8/en/seasons/2023/REG/teams/${teamID}/statistics.json?api_key=${apiKey}`,
-      { headers },
+      `https://api.sportradar.com/nba/trial/v8/en/seasons/${year}/REG/teams/${teamID}/statistics.json?api_key=${apiKey}`,
+      { headers }
     );
 
     const teamStats = teamStatsResponse.data.own_record.average;
@@ -32,7 +32,7 @@ export async function POST(req) {
   } catch (error) {
     return NextResponse.json(
       { message: "Error fetching data", error: error.message },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

@@ -55,6 +55,25 @@ export default function Home() {
   }, []);
 
   // FUNCTIONS
+  //This function is weird and not working
+  const fetchTeamStats = (selectedTeamObj, selectedYear) => {
+    if (selectedTeamObj && selectedYear) {
+      axios
+        .post("/api/proxy/teamStats", {
+          teamID: selectedTeamObj.id,
+          year: selectedYear,
+        })
+        .then((response) => {
+          console.log("Team stats fetched successfully:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching team stats:", error);
+        });
+    } else {
+      console.log("Both team and year must be selected.");
+    }
+  };
+
   const handleTeamChange = (e) => {
     const teamName = e.target.value;
     setTeam(teamName);
@@ -64,26 +83,14 @@ export default function Home() {
       (teamObj) => teamObj.name === teamName
     );
 
-    // Sends the Team ID to the backend, specifically to api/proxy/teamStats
-    axios
-      .post("/api/proxy/teamStats", { teamID: selectedTeamObj.id })
-      .then((response) => {
-        console.log("Team stats fetched successfully:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching team stats:", error);
-      });
+    fetchTeamStats(selectedTeamObj, year);
   };
 
   const handleYearChange = (e) => {
-    const yearNumber = e.target.value;
-    setYear(yearNumber);
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
 
-    const selectedYearObj = yearNumbers.find(
-      (yearObj) => yearObj === yearNumber
-    );
-
-    console.log(selectedYearObj);
+    const selectedTeamObj = teamNames.find((teamObj) => teamObj.name === team);
   };
 
   const handleClick = () => {
