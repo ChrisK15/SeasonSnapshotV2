@@ -14,7 +14,7 @@ import axios from "axios";
 
 /*
 These are the imported data sets that we manually created:
-/What's up?
+/Testing
 nbaTeams: List of teams to filter out the weird teams that the API returns
 createData: Not implemented yet, but these are the columns of the table that will be returned for out team stats
 yearList: List of years
