@@ -7,7 +7,12 @@ import {
   MenuItem,
   Select,
   Table,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
+  Paper,
+  TableCell,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -150,17 +155,28 @@ export default function Home() {
       </div>
 
       {open && (
-        <Box
-          mt={2}
-          p={2}
-          border={1}
-          borderRadius={8}
-          borderColor="grey.300"
-          bgcolor="grey.100"
-          height={1000} // Fixed height
-          width={1000} // Fixed width
-          overflow="auto" // Scrollable content
-        ></Box>
+        <div style={{ marginTop: '20px' }} overflow="auto">
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 1500 }} aria-label="team table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Averages</TableCell>
+                  <TableCell align="right">PTS</TableCell>
+                  <TableCell align="right">3PM</TableCell>
+                  <TableCell align="right">FGM</TableCell>
+                  <TableCell align="right">AST</TableCell>
+                  <TableCell align="right">REB</TableCell>
+                  <TableCell align="right">STL</TableCell>
+                  <TableCell align="right">BLK</TableCell>
+                  <TableCell align="right">TO</TableCell>
+                  <TableCell align="right">FB-PTS</TableCell>
+                  <TableCell align="right">SC-PTS</TableCell>
+                  <TableCell align="right">BNCH-PTS</TableCell>
+                </TableRow>
+              </TableHead>
+            </Table>
+          </TableContainer>
+        </div>
       )}
     </div>
   );
