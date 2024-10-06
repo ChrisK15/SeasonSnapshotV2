@@ -10,10 +10,13 @@ export default function Home() {
   
   return (
     <div
-      style={{
-        backgroundImage: "url('/images/home-background.jpg')",
-        minHeight: "100vh",
-        padding: "20 px"
+    style={{
+      backgroundImage: "url('/images/home-background.jpg')",
+      backgroundSize: "cover",         // Ensures the image covers the whole screen
+      backgroundPosition: "center",    // Centers the image
+      backgroundRepeat: "no-repeat",   // Prevents image from repeating
+      minHeight: "100vh",
+      padding: "20px"
       }}>
       
       <div

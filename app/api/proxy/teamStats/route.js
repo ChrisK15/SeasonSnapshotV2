@@ -26,7 +26,12 @@ export async function POST(req) {
       { headers }
     );
 
-    const teamStats = teamStatsResponse.data.own_record.average;
+    const teamStats = teamStatsResponse.data.own_record.total;
+    3
+
+
+
+
 
     return NextResponse.json(teamStats);
   } catch (error) {

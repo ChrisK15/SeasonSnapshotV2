@@ -14,10 +14,14 @@ import axios from "axios";
 
 /*
 These are the imported data sets that we manually created:
-/Testing
+
 nbaTeams: List of teams to filter out the weird teams that the API returns
 createData: Not implemented yet, but these are the columns of the table that will be returned for out team stats
 yearList: List of years
+
+10/6/2024 - 
+centered image in the home screen
+created a setTeamStats state to store the team stats and displayed them in the box when team and year is selected.
 */
 import { nbaTeams } from "../data/teams";
 import { createData } from "../data/tableStuff";
@@ -29,6 +33,7 @@ export default function Home() {
   const [teamNames, setTeamNames] = useState([]);
   const [year, setYear] = useState("");
   const [yearNumbers, setYearNumbers] = useState([]);
+  const [teamStats, setTeamStats] = useState(null);  // Added this stat to store stats
   const [open, setOpen] = useState(false);
 
   // API stuff, everything happening here is in unison with the route.js files in the app/api/proxy folder
@@ -65,6 +70,7 @@ export default function Home() {
         })
         .then((response) => {
           console.log("Team stats fetched successfully:", response.data);
+          setTeamStats(response.data);  // Update the state with fetched stats
         })
         .catch((error) => {
           console.error("Error fetching team stats:", error);
@@ -206,7 +212,26 @@ export default function Home() {
           height={1000} // Fixed height
           width={1000} // Fixed width
           overflow='auto' // Scrollable content
-        ></Box>
+        >
+          {teamStats ? (
+      <div>
+        <Typography variant='h5'>Team Stats:</Typography>
+        {/* Assuming teamStats is an object, loop through the stats and display them */}
+        <Table>
+          <tbody>
+            {Object.keys(teamStats).map((key) => (
+              <tr key={key}>
+                <td>{key}:</td>
+                <td>{teamStats[key]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+    ) : (
+      <Typography variant='h6'>No stats available</Typography>
+    )}
+        </Box>
       )}
     </div>
       </div>
