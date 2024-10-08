@@ -13,6 +13,7 @@ import {
   Typography,
   Paper,
   TableCell,
+  TableBody,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -36,6 +37,7 @@ export default function Home() {
   const [year, setYear] = useState('');
   const [yearNumbers, setYearNumbers] = useState([]);
   const [open, setOpen] = useState(false);
+  const [newRow, setNewRow] = useState([]);
 
   // API stuff, everything happening here is in unison with the route.js files in the app/api/proxy folder
   useEffect(() => {
@@ -79,8 +81,6 @@ export default function Home() {
 
   const handleClick = () => {
     if (teamID && year) {
-      console.log(teamID);
-      console.log(year);
       setOpen(!open);
       axios
         .post('/api/proxy/teamStats', {
@@ -89,6 +89,8 @@ export default function Home() {
         })
         .then((response) => {
           console.log('Team stats fetched successfully:', response.data);
+          setNewRow(makeRow(response));
+          console.log(newRow);
         })
         .catch((error) => {
           console.error('Error fetching team stats:', error);
@@ -97,6 +99,26 @@ export default function Home() {
       console.log('Both team and year must be selected.');
     }
   };
+
+  function makeRow(response) {
+    const rows = [
+      createData(
+        team,
+        response.data.points,
+        response.data.three_points_made,
+        response.data.field_goals_made,
+        response.data.assists,
+        response.data.rebounds,
+        response.data.steals,
+        response.data.blocks,
+        response.data.turnovers,
+        response.data.fast_break_pts,
+        response.data.second_chance_pts,
+        response.data.bench_points,
+      ),
+    ];
+    return rows;
+  }
 
   return (
     <div
@@ -160,7 +182,7 @@ export default function Home() {
             <Table sx={{ minWidth: 1500 }} aria-label="team table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Averages</TableCell>
+                  <TableCell>Total</TableCell>
                   <TableCell align="right">PTS</TableCell>
                   <TableCell align="right">3PM</TableCell>
                   <TableCell align="right">FGM</TableCell>
@@ -174,6 +196,29 @@ export default function Home() {
                   <TableCell align="right">BNCH-PTS</TableCell>
                 </TableRow>
               </TableHead>
+              <TableBody>
+                {newRow.map((row) => (
+                  <TableRow
+                    key={row.team_name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.team_name}
+                    </TableCell>
+                    <TableCell align="right">{row.points}</TableCell>
+                    <TableCell align="right">{row.three_points_made}</TableCell>
+                    <TableCell align="right">{row.field_goals_made}</TableCell>
+                    <TableCell align="right">{row.assists}</TableCell>
+                    <TableCell align="right">{row.rebounds}</TableCell>
+                    <TableCell align="right">{row.steals}</TableCell>
+                    <TableCell align="right">{row.blocks}</TableCell>
+                    <TableCell align="right">{row.turnovers}</TableCell>
+                    <TableCell align="right">{row.fast_break_pts}</TableCell>
+                    <TableCell align="right">{row.second_chance_pts}</TableCell>
+                    <TableCell align="right">{row.bench_points}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </TableContainer>
         </div>

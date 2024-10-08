@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server";
-import axios from "axios";
+import { NextResponse } from 'next/server';
+import axios from 'axios';
+
+import { createData } from '../../../data/tableStuff';
 
 /*
 This POST request takes input from the front-end and makes a request to the API to get the right stats for the right team
@@ -13,7 +15,7 @@ teamStats: from JSON data, takes the average values. This is not mathematically 
 export async function POST(req) {
   try {
     const headers = {
-      accept: "application/json",
+      accept: 'application/json',
     };
 
     const { teamID, year } = await req.json();
@@ -23,7 +25,7 @@ export async function POST(req) {
     // TEAM STATS
     const teamStatsResponse = await axios.get(
       `https://api.sportradar.com/nba/trial/v8/en/seasons/${year}/REG/teams/${teamID}/statistics.json?api_key=${apiKey}`,
-      { headers }
+      { headers },
     );
 
     const teamStats = teamStatsResponse.data.own_record.average;
@@ -31,8 +33,8 @@ export async function POST(req) {
     return NextResponse.json(teamStats);
   } catch (error) {
     return NextResponse.json(
-      { message: "Error fetching data", error: error.message },
-      { status: 500 }
+      { message: 'Error fetching data', error: error.message },
+      { status: 500 },
     );
   }
 }
