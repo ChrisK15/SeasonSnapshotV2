@@ -177,7 +177,7 @@ export default function Home() {
       </div>
 
       {open && (
-        <div style={{ marginTop: '20px' }} overflow="auto">
+        <div style={{ marginTop: '20px', marginBottom: '20px' }} overflow="auto">
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 1500 }} aria-label="team table">
               <TableHead>
