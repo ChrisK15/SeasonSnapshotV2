@@ -221,7 +221,7 @@ export default function Home() {
           </Button>
         </Grid>
 
-        {/* Table for team and player stats */}
+        {/* Table for team and player stats  - to update table*/}
         {open && (
           <Grid item xs={12}>
             <Box

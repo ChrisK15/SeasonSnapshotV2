@@ -25,7 +25,7 @@ export async function POST(req) {
     );
 
     // Extract team stats
-    const teamStats = teamStatsResponse.data.own_record.total;
+    const teamStats = teamStatsResponse.data.own_record.average;
 
     // Extract player data
     const playersData = teamStatsResponse.data.players;
@@ -36,14 +36,14 @@ export async function POST(req) {
       full_name: player.full_name,
       position: player.primary_position,
       games_played: player.total.games_played,
-      points: player.total.points,
-      assists: player.total.assists,
-      rebounds: player.total.rebounds,
-      steals: player.total.steals,
-      blocks: player.total.blocks,
-      field_goals_pct: player.total.field_goals_pct,
-      three_points_pct: player.total.three_points_pct,
-      free_throws_pct: player.total.free_throws_pct,
+      points: player.average.points,
+      assists: player.average.assists,
+      rebounds: player.average.rebounds,
+      steals: player.average.steals,
+      blocks: player.average.blocks,
+      field_goals_pct: player.average.field_goals_pct,
+      three_points_pct: player.average.three_points_pct,
+      free_throws_pct: player.average.free_throws_pct,
     }));
 
     // Return both team stats and player data as a JSON response
