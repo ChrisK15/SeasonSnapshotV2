@@ -19,7 +19,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 /*
-These are the imported data sets that we manually created:
+These are the imported data sets that we manually created: hi
 
 nbaTeams: List of teams to filter out the weird teams that the API returns
 createData: Not implemented yet, but these are the columns of the table that will be returned for out team stats
