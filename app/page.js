@@ -36,7 +36,7 @@ export default function Home() {
   const [teamID, setTeamID] = useState('');
   const [year, setYear] = useState('');
   const [yearNumbers, setYearNumbers] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [openTable, setOpenTable] = useState(false);
   const [newRow, setNewRow] = useState([]);
 
   // API stuff, everything happening here is in unison with the route.js files in the app/api/proxy folder
@@ -46,7 +46,7 @@ export default function Home() {
         const response = await axios.get('/api/proxy/teamNames/');
 
         const filteredTeams = response.data.filter((team) =>
-          nbaTeams.includes(team.market),
+          nbaTeams.includes(team.market)
         );
         setTeamNames(filteredTeams);
       } catch (err) {
@@ -62,26 +62,10 @@ export default function Home() {
     getTeamNames();
   }, []);
 
-  // FUNCTIONS
-  const handleTeamChange = (e) => {
-    const teamName = e.target.value;
-    setTeam(teamName);
-
-    // Tracks whichever team is selected in the dropdown
-    const selectedTeamObj = teamNames.find(
-      (teamObj) => teamObj.name === teamName,
-    );
-    setTeamID(selectedTeamObj.id);
-  };
-
-  const handleYearChange = (e) => {
-    const selectedYear = e.target.value;
-    setYear(selectedYear);
-  };
-
-  const handleClick = () => {
+  // Renders table when both a teamID and year are selected
+  useEffect(() => {
     if (teamID && year) {
-      setOpen(!open);
+      setOpenTable(true);
       axios
         .post('/api/proxy/teamStats', {
           teamID: teamID,
@@ -98,6 +82,25 @@ export default function Home() {
     } else {
       console.log('Both team and year must be selected.');
     }
+  }, [teamID, year]);
+
+  // FUNCTIONS
+  const handleTeamChange = (e) => {
+    const teamName = e.target.value;
+    setTeam(teamName);
+
+    // Tracks whichever team is selected in the dropdown
+    const selectedTeamObj = teamNames.find(
+      (teamObj) => teamObj.name === teamName
+    );
+    setTeamID(selectedTeamObj.id);
+    checkIfTableShouldBeRendered();
+  };
+
+  const handleYearChange = (e) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
+    checkIfTableShouldBeRendered();
   };
 
   function makeRow(response) {
@@ -114,7 +117,7 @@ export default function Home() {
         response.data.turnovers,
         response.data.fast_break_pts,
         response.data.second_chance_pts,
-        response.data.bench_points,
+        response.data.bench_points
       ),
     ];
     return rows;
@@ -165,7 +168,7 @@ export default function Home() {
             ))}
           </Select>
         </FormControl>
-
+        {/*
         <Button
           variant="contained"
           size="small"
@@ -174,10 +177,14 @@ export default function Home() {
         >
           Open
         </Button>
+        */}
       </div>
 
-      {open && (
-        <div style={{ marginTop: '20px', marginBottom: '20px' }} overflow="auto">
+      {openTable && (
+        <div
+          style={{ marginTop: '20px', marginBottom: '20px' }}
+          overflow="auto"
+        >
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 1500 }} aria-label="team table">
               <TableHead>
