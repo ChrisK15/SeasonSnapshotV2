@@ -46,7 +46,7 @@ export default function Home() {
         const response = await axios.get('/api/proxy/teamNames/');
 
         const filteredTeams = response.data.filter((team) =>
-          nbaTeams.includes(team.market)
+          nbaTeams.includes(team.market),
         );
         setTeamNames(filteredTeams);
       } catch (err) {
@@ -74,7 +74,6 @@ export default function Home() {
         .then((response) => {
           console.log('Team stats fetched successfully:', response.data);
           setNewRow(makeRow(response));
-          console.log(newRow);
         })
         .catch((error) => {
           console.error('Error fetching team stats:', error);
@@ -91,7 +90,7 @@ export default function Home() {
 
     // Tracks whichever team is selected in the dropdown
     const selectedTeamObj = teamNames.find(
-      (teamObj) => teamObj.name === teamName
+      (teamObj) => teamObj.name === teamName,
     );
     setTeamID(selectedTeamObj.id);
   };
@@ -115,7 +114,7 @@ export default function Home() {
         response.data.turnovers,
         response.data.fast_break_pts,
         response.data.second_chance_pts,
-        response.data.bench_points
+        response.data.bench_points,
       ),
     ];
     return rows;
@@ -166,16 +165,6 @@ export default function Home() {
             ))}
           </Select>
         </FormControl>
-        {/*
-        <Button
-          variant="contained"
-          size="small"
-          disableElevation
-          onClick={handleClick}
-        >
-          Open
-        </Button>
-        */}
       </div>
 
       {openTable && (

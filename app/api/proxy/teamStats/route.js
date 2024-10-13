@@ -27,10 +27,12 @@ export async function POST(req) {
       `https://api.sportradar.com/nba/trial/v8/en/seasons/${year}/REG/teams/${teamID}/statistics.json?api_key=${apiKey}`,
       { headers },
     );
-
     const teamStats = teamStatsResponse.data.own_record.average;
 
-    return NextResponse.json(teamStats);
+    // PLAYER STATS
+    const playerStats = teamStats.data.players;
+
+    return NextResponse.json(teamStats, playerStats);
   } catch (error) {
     return NextResponse.json(
       { message: 'Error fetching data', error: error.message },
