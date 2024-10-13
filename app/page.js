@@ -94,13 +94,11 @@ export default function Home() {
       (teamObj) => teamObj.name === teamName
     );
     setTeamID(selectedTeamObj.id);
-    checkIfTableShouldBeRendered();
   };
 
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;
     setYear(selectedYear);
-    checkIfTableShouldBeRendered();
   };
 
   function makeRow(response) {
