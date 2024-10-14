@@ -60,7 +60,7 @@ export async function POST(req) {
   } catch (error) {
     return NextResponse.json(
       { message: 'Error fetching data', error: error.message },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
