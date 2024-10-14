@@ -26,7 +26,7 @@ createData: Not implemented yet, but these are the columns of the table that wil
 yearList: List of years
 */
 import { nbaTeams } from './data/teams';
-import { createData } from './data/tableStuff';
+import { createTeamData } from './data/tableTeamColumns';
 import { yearList } from './data/years';
 
 export default function Home() {
@@ -102,7 +102,7 @@ export default function Home() {
 
   function makeRow(response) {
     const rows = [
-      createData(
+      createTeamData(
         team,
         response.data.points,
         response.data.three_points_made,
@@ -172,6 +172,50 @@ export default function Home() {
           style={{ marginTop: '20px', marginBottom: '20px' }}
           overflow="auto"
         >
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 1500 }} aria-label="player table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Total</TableCell>
+                  <TableCell align="right">PTS</TableCell>
+                  <TableCell align="right">3PM</TableCell>
+                  <TableCell align="right">FGM</TableCell>
+                  <TableCell align="right">AST</TableCell>
+                  <TableCell align="right">REB</TableCell>
+                  <TableCell align="right">STL</TableCell>
+                  <TableCell align="right">BLK</TableCell>
+                  <TableCell align="right">TO</TableCell>
+                  <TableCell align="right">FB-PTS</TableCell>
+                  <TableCell align="right">SC-PTS</TableCell>
+                  <TableCell align="right">BNCH-PTS</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {newRow.map((row) => (
+                  <TableRow
+                    key={row.team_name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.team_name}
+                    </TableCell>
+                    <TableCell align="right">{row.points}</TableCell>
+                    <TableCell align="right">{row.three_points_made}</TableCell>
+                    <TableCell align="right">{row.field_goals_made}</TableCell>
+                    <TableCell align="right">{row.assists}</TableCell>
+                    <TableCell align="right">{row.rebounds}</TableCell>
+                    <TableCell align="right">{row.steals}</TableCell>
+                    <TableCell align="right">{row.blocks}</TableCell>
+                    <TableCell align="right">{row.turnovers}</TableCell>
+                    <TableCell align="right">{row.fast_break_pts}</TableCell>
+                    <TableCell align="right">{row.second_chance_pts}</TableCell>
+                    <TableCell align="right">{row.bench_points}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 1500 }} aria-label="team table">
               <TableHead>
