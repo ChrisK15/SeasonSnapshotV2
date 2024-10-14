@@ -1,4 +1,5 @@
 export function createData(
+  team_name,
   points,
   three_points_made,
   field_goals_made,
@@ -9,9 +10,10 @@ export function createData(
   turnovers,
   fast_break_pts,
   second_chance_pts,
-  bench_points
+  bench_points,
 ) {
   return {
+    team_name,
     points,
     three_points_made,
     field_goals_made,

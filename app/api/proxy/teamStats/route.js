@@ -1,5 +1,7 @@
-import { NextResponse } from "next/server";
-import axios from "axios";
+import { NextResponse } from 'next/server';
+import axios from 'axios';
+
+import { createData } from '../../../data/tableStuff';
 
 /*
 This POST request takes input from the front-end and makes a request to the API to get the right stats for the right team
@@ -9,7 +11,7 @@ input: teamID of the team that is selected from the dropdown menu
 export async function POST(req) {
   try {
     const headers = {
-      accept: "application/json",
+      accept: 'application/json',
     };
 
     // Extracting teamID and year from the request body
@@ -21,7 +23,7 @@ export async function POST(req) {
     // Fetch team statistics and players from the Sports Radar API
     const teamStatsResponse = await axios.get(
       `https://api.sportradar.com/nba/trial/v8/en/seasons/${year}/REG/teams/${teamID}/statistics.json?api_key=${apiKey}`,
-      { headers }
+      { headers },
     );
 
     // Extract team stats
@@ -53,8 +55,8 @@ export async function POST(req) {
     });
   } catch (error) {
     return NextResponse.json(
-      { message: "Error fetching data", error: error.message },
-      { status: 500 }
+      { message: 'Error fetching data', error: error.message },
+      { status: 500 },
     );
   }
 }
