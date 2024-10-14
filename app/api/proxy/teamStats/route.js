@@ -55,7 +55,7 @@ export async function POST(req) {
     // Return both team stats and player data as a JSON response
     return NextResponse.json({
       teamStats,
-      players,
+      //players,
     });
   } catch (error) {
     return NextResponse.json(

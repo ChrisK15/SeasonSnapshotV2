@@ -25,9 +25,9 @@ nbaTeams: List of teams to filter out the weird teams that the API returns
 createData: Not implemented yet, but these are the columns of the table that will be returned for out team stats
 yearList: List of years
 */
-import { nbaTeams } from './data/teams';
-import { createData } from './data/tableStuff';
-import { yearList } from './data/years';
+import { nbaTeams } from '../data/teams';
+import { createData } from '../data/tableStuff';
+import { yearList } from '../data/years';
 
 export default function Home() {
   // STATES
@@ -43,7 +43,7 @@ export default function Home() {
   useEffect(() => {
     const getTeamNames = async () => {
       try {
-        const response = await axios.get('/api/proxy/teamNames/');
+        const response = await axios.get('/api/proxy/teamNames');
 
         const filteredTeams = response.data.filter((team) =>
           nbaTeams.includes(team.market)
