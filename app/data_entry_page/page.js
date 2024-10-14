@@ -43,7 +43,7 @@ export default function Home() {
   useEffect(() => {
     const getTeamNames = async () => {
       try {
-        const response = await axios.get('/api/proxy/teamNames');
+        const response = await axios.get('../api/proxy/teamNames/');
 
         const filteredTeams = response.data.filter((team) =>
           nbaTeams.includes(team.market)
@@ -67,14 +67,13 @@ export default function Home() {
     if (teamID && year) {
       setOpenTable(true);
       axios
-        .post('/api/proxy/teamStats', {
+        .post('../api/proxy/teamStats/', {
           teamID: teamID,
           year: year,
         })
         .then((response) => {
           console.log('Team stats fetched successfully:', response.data);
           setNewRow(makeRow(response));
-          console.log(newRow);
         })
         .catch((error) => {
           console.error('Error fetching team stats:', error);
