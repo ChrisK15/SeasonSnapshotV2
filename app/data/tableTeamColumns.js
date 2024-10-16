@@ -1,4 +1,4 @@
-export function createData(
+export function createTeamData(
   team_name,
   points,
   three_points_made,

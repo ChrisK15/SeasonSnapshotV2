@@ -20,36 +20,32 @@ export async function POST(req) {
 
     const apiKey = process.env.SPORTS_RADAR_API_KEY;
 
-    // Fetch team statistics and players from the Sports Radar API
+    // TEAM STATS
     const teamStatsResponse = await axios.get(
       `https://api.sportradar.com/nba/trial/v8/en/seasons/${year}/REG/teams/${teamID}/statistics.json?api_key=${apiKey}`,
       { headers }
     );
-
-    // Extract team stats
     const teamStats = teamStatsResponse.data.own_record.average;
 
-    // Extract player data
-    //const playersData = teamStatsResponse.data.players;
+    // PLAYER STATS
+    const playerStats = teamStatsResponse.data.players;
 
-    // Map through player data to return essential stats
-    // const players = playersData.map((player) => ({
-    //   id: player.id,
-    //   full_name: player.full_name,
-    //   position: player.primary_position,
-    //   games_played: player.total.games_played,
-    //   points: player.average.points,
-    //   assists: player.average.assists,
-    //   rebounds: player.average.rebounds,
-    //   steals: player.average.steals,
-    //   blocks: player.average.blocks,
-    //   field_goals_pct: player.average.field_goals_pct,
-    //   three_points_pct: player.average.three_points_pct,
-    //   free_throws_pct: player.average.free_throws_pct,
-    // }));
+    const players = playersData.map((player) => ({
+      id: player.id,
+      full_name: player.full_name,
+      position: player.primary_position,
+      games_played: player.total.games_played,
+      points: player.average.points,
+      assists: player.average.assists,
+      rebounds: player.average.rebounds,
+      steals: player.average.steals,
+      blocks: player.average.blocks,
+      field_goals_pct: player.average.field_goals_pct,
+      three_points_pct: player.average.three_points_pct,
+      free_throws_pct: player.average.free_throws_pct,
+    }));
 
-    // Return both team stats and player data as a JSON response
-    return NextResponse.json(teamStats);
+    return NextResponse.json({ teamStats, players });
   } catch (error) {
     return NextResponse.json(
       { message: 'Error fetching data', error: error.message },

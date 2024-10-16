@@ -7,64 +7,220 @@ import {
   MenuItem,
   Select,
   Table,
-  TableBody,
-  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableSortLabel,
   Typography,
-  Grid,
+  Paper,
+  TableCell,
+  TableBody,
 } from '@mui/material';
-import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+/*
+These are the imported data sets that we manually created: hi
+
+nbaTeams: List of teams to filter out the weird teams that the API returns
+createData: Not implemented yet, but these are the columns of the table that will be returned for out team stats
+yearList: List of years
+*/
+import { nbaTeams } from './data/teams';
+import { createTeamData } from './data/tableTeamColumns';
+import { createPlayerData } from './data/tablePlayerColumns';
+import { yearList } from './data/years';
 
 export default function Home() {
+  // STATES
+  const [team, setTeam] = useState('');
+  const [teamNames, setTeamNames] = useState([]);
+  const [playerStats, setPlayerStats] = useState([]);
+  const [teamID, setTeamID] = useState('');
+  const [year, setYear] = useState('');
+  const [yearNumbers, setYearNumbers] = useState([]);
+  const [openTable, setOpenTable] = useState(false);
+  const [newRow, setNewRow] = useState([]);
+
+  // API stuff, everything happening here is in unison with the route.js files in the app/api/proxy folder
+  useEffect(() => {
+    const getTeamNames = async () => {
+      try {
+        const response = await axios.get('/api/proxy/teamNames/');
+
+        const filteredTeams = response.data.filter((team) =>
+          nbaTeams.includes(team.market)
+        );
+        setTeamNames(filteredTeams);
+      } catch (err) {
+        console.error('Error fetching team names:', err);
+      }
+    };
+
+    const getYearNumbers = async () => {
+      setYearNumbers(yearList);
+    };
+
+    getYearNumbers();
+    getTeamNames();
+  }, []);
+
+  // Renders table when both a teamID and year are selected
+  useEffect(() => {
+    if (teamID && year) {
+      setOpenTable(true);
+      axios
+        .post('/api/proxy/teamStats', {
+          teamID: teamID,
+          year: year,
+        })
+        .then((response) => {
+          console.log('Team stats fetched successfully:', response.data);
+          const { teamStats, players } = response.data;
+          setNewRow(makeRow(teamStats));
+          setPlayerStats(players);
+        })
+        .catch((error) => {
+          console.error('Error fetching team stats:', error);
+        });
+    } else {
+      console.log('Both team and year must be selected.');
+    }
+  }, [teamID, year]);
+
+  // FUNCTIONS
+  const handleTeamChange = (e) => {
+    const teamName = e.target.value;
+    setTeam(teamName);
+
+    // Tracks whichever team is selected in the dropdown
+    const selectedTeamObj = teamNames.find(
+      (teamObj) => teamObj.name === teamName
+    );
+    setTeamID(selectedTeamObj.id);
+  };
+
+  const handleYearChange = (e) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
+  };
+
+  function makeRow(response) {
+    const rows = [
+      createTeamData(
+        team,
+        response.data.teamStats.points,
+        response.data.teamStats.three_points_made,
+        response.data.teamStats.field_goals_made,
+        response.data.teamStats.assists,
+        response.data.teamStats.rebounds,
+        response.data.teamStats.steals,
+        response.data.teamStats.blocks,
+        response.data.teamStats.turnovers,
+        response.data.teamStats.fast_break_pts,
+        response.data.teamStats.second_chance_pts,
+        response.data.teamStats.bench_points
+      ),
+    ];
+    return rows;
+  }
+
   return (
     <div
       style={{
-        backgroundImage: "url('/images/home-background.jpg')",
-        backgroundSize: 'cover', // Ensures the image covers the whole screen
-        backgroundPosition: 'center', // Centers the image
-        backgroundRepeat: 'no-repeat', // Prevents image from repeating
-        minHeight: '100vh', // Full screen height
-        display: 'flex', // Use flexbox for centering
-        justifyContent: 'center', // Center horizontally
-        alignItems: 'center', // Center vertically
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
       }}
     >
-      <Grid
-        container
-        spacing={3}
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        style={{ textAlign: 'center' }}
-      >
-        {/* Title */}
-        <Grid item xs={12}>
-          <Typography variant="h1" style={{ color: 'white' }}>
-            Season
-          </Typography>
-          <Typography variant="h1" style={{ color: 'white' }}>
-            Snapshot
-          </Typography>
-          <Typography
-            variant="h3"
-            style={{ color: 'white', marginTop: '20px' }}
+      <Typography variant="h1">Season Snapshot</Typography>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <FormControl sx={{ m: 1, minWidth: 80 }}>
+          <InputLabel id="team-select-label">Team</InputLabel>
+          <Select
+            labelId="team-select-label"
+            id="team-select"
+            value={team}
+            onChange={handleTeamChange}
+            autoWidth
+            label="Team"
           >
-            Every stat, every game, in a snap.
-          </Typography>
-        </Grid>
+            {teamNames.map((teamObj) => (
+              <MenuItem key={teamObj.id} value={teamObj.name}>
+                {teamObj.market} {teamObj.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-        {/* Button */}
-        <Grid item xs={12}>
-          <Link href="/data_entry_page">
-            <Button variant="contained" size="large">
-              Get Started
-            </Button>
-          </Link>
-        </Grid>
-      </Grid>
+        <FormControl sx={{ m: 1, minWidth: 80 }}>
+          <InputLabel id="year-select-label">Year</InputLabel>
+          <Select
+            labelId="year-select-label"
+            id="year-select"
+            value={year}
+            onChange={handleYearChange}
+            autoWidth
+            label="Years"
+          >
+            {yearNumbers.map((yearObj) => (
+              <MenuItem key={yearObj} value={yearObj}>
+                {yearObj}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+
+      {openTable && (
+        <div
+          style={{ marginTop: '20px', marginBottom: '20px' }}
+          overflow="auto"
+        >
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 1500 }} aria-label="team table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Total</TableCell>
+                  <TableCell align="right">PTS</TableCell>
+                  <TableCell align="right">3PM</TableCell>
+                  <TableCell align="right">FGM</TableCell>
+                  <TableCell align="right">AST</TableCell>
+                  <TableCell align="right">REB</TableCell>
+                  <TableCell align="right">STL</TableCell>
+                  <TableCell align="right">BLK</TableCell>
+                  <TableCell align="right">TO</TableCell>
+                  <TableCell align="right">FB-PTS</TableCell>
+                  <TableCell align="right">SC-PTS</TableCell>
+                  <TableCell align="right">BNCH-PTS</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {newRow.map((row) => (
+                  <TableRow
+                    key={row.team_name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.team_name}
+                    </TableCell>
+                    <TableCell align="right">{row.points}</TableCell>
+                    <TableCell align="right">{row.three_points_made}</TableCell>
+                    <TableCell align="right">{row.field_goals_made}</TableCell>
+                    <TableCell align="right">{row.assists}</TableCell>
+                    <TableCell align="right">{row.rebounds}</TableCell>
+                    <TableCell align="right">{row.steals}</TableCell>
+                    <TableCell align="right">{row.blocks}</TableCell>
+                    <TableCell align="right">{row.turnovers}</TableCell>
+                    <TableCell align="right">{row.fast_break_pts}</TableCell>
+                    <TableCell align="right">{row.second_chance_pts}</TableCell>
+                    <TableCell align="right">{row.bench_points}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      )}
     </div>
   );
 }
