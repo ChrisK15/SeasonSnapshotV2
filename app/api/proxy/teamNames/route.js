@@ -14,6 +14,7 @@ export async function GET() {
     const headers = {
       accept: "application/json",
     };
+    // eslint-disable-next-line no-undef
     const apiKey = process.env.SPORTS_RADAR_API_KEY;
     // LIST OF TEAMS
     const teamListResponse = await axios.get(

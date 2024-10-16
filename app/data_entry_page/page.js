@@ -104,7 +104,7 @@ export default function Home() {
     setYear(selectedYear);
   };
 
-  const generateTableColumn = (data) => {
+  const generateTeamTableColumn = (data) => {
     if (!data || data.length === 0) {
       return null;
     }
@@ -114,6 +114,17 @@ export default function Home() {
       </TableCell>
     ));
   };
+
+  // const generatePlayerTableColumn = (data) => {
+  //   if (!data || data.length === 0) {
+  //     return null;
+  //   }
+  //   return displayedTeamColumns.map((key) => (
+  //     <TableCell key={key} align="right">
+  //       {teamColumnNameMap[key]}
+  //     </TableCell>
+  //   ));
+  // };
 
   const generateTableRows = (data) => {
     if (!data || data.length === 0) {
@@ -202,26 +213,28 @@ export default function Home() {
       </div>
 
       {openTable && (
-        <Box
-          style={{
-            marginTop: '20px',
-            marginBottom: '20px',
-            width: '100%',
-            maxWidth: '90%',
-            overflowX: 'auto',
-            borderRadius: '5px',
-            border: 'solid',
-          }}
-        >
-          <TableContainer component={Paper}>
-            <Table aria-label="team table" size='small'>
-              <TableHead>
-                <TableRow>{generateTableColumn(teamStats)}</TableRow>
-              </TableHead>
-              <TableBody>{generateTableRows(teamStats)}</TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+        <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+          <Box
+            style={{
+              marginTop: '20px',
+              marginBottom: '20px',
+              width: '100%',
+              maxWidth: '100%',
+              overflowX: 'auto',
+              borderRadius: '6px',
+              border: 'solid',
+            }}
+          >
+            <TableContainer component={Paper}>
+              <Table aria-label="team table" size='small'>
+                <TableHead>
+                  <TableRow>{generateTeamTableColumn(teamStats)}</TableRow>
+                </TableHead>
+                <TableBody>{generateTableRows(teamStats)}</TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </div>
       )}
     </div>
   );
