@@ -18,6 +18,7 @@ export async function POST(req) {
 
     const { teamID, year } = await req.json();
 
+    // eslint-disable-next-line no-undef
     const apiKey = process.env.SPORTS_RADAR_API_KEY;
 
     // TEAM STATS
@@ -30,7 +31,7 @@ export async function POST(req) {
     // PLAYER STATS
     const playerStats = teamStatsResponse.data.players;
 
-    const players = playersData.map((player) => ({
+    const players = playerStats.map((player) => ({
       id: player.id,
       full_name: player.full_name,
       position: player.primary_position,
@@ -46,6 +47,7 @@ export async function POST(req) {
     }));
 
     return NextResponse.json({ teamStats, players });
+    //return NextResponse.json(teamStats);
   } catch (error) {
     return NextResponse.json(
       { message: 'Error fetching data', error: error.message },

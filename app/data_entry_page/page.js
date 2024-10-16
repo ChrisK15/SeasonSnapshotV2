@@ -1,7 +1,7 @@
+/* eslint-disable no-unused-vars */
 'use client';
 import {
   Box,
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -26,31 +26,32 @@ createData: Not implemented yet, but these are the columns of the table that wil
 yearList: List of years
 */
 import { nbaTeams } from '../data/teams';
-import { createData } from '../data/tableStuff';
+import { displayedTeamColumns, teamColumnNameMap } from '../data/tableTeamColumns';
 import { yearList } from '../data/years';
 
 export default function Home() {
   // STATES
   const [team, setTeam] = useState('');
   const [teamNames, setTeamNames] = useState([]);
+  const [playerStats, setPlayerStats] = useState([]);
+  const [teamStats, setTeamStats] = useState([]);
   const [teamID, setTeamID] = useState('');
   const [year, setYear] = useState('');
   const [yearNumbers, setYearNumbers] = useState([]);
   const [openTable, setOpenTable] = useState(false);
-  const [newRow, setNewRow] = useState([]);
 
   // API stuff, everything happening here is in unison with the route.js files in the app/api/proxy folder
   useEffect(() => {
     const getTeamNames = async () => {
       try {
-        const response = await axios.get('../api/proxy/teamNames/');
+        const response = await axios.get('/api/proxy/teamNames/');
 
         const filteredTeams = response.data.filter((team) =>
           nbaTeams.includes(team.market)
         );
         setTeamNames(filteredTeams);
       } catch (err) {
-        console.error('Error fetching team names:', err);
+        console.error('Error fetching team names:', err.message);
       }
     };
 
@@ -67,13 +68,16 @@ export default function Home() {
     if (teamID && year) {
       setOpenTable(true);
       axios
-        .post('../api/proxy/teamStats/', {
+        .post('/api/proxy/teamStats', {
           teamID: teamID,
           year: year,
         })
         .then((response) => {
           console.log('Team stats fetched successfully:', response.data);
-          setNewRow(makeRow(response));
+          const { teamStats, players } = response.data;
+          //console.log(teamStats);
+          setTeamStats([teamStats]);
+          setPlayerStats(players);
         })
         .catch((error) => {
           console.error('Error fetching team stats:', error);
@@ -100,25 +104,55 @@ export default function Home() {
     setYear(selectedYear);
   };
 
-  function makeRow(response) {
-    const rows = [
-      createData(
-        team,
-        response.data.points,
-        response.data.three_points_made,
-        response.data.field_goals_made,
-        response.data.assists,
-        response.data.rebounds,
-        response.data.steals,
-        response.data.blocks,
-        response.data.turnovers,
-        response.data.fast_break_pts,
-        response.data.second_chance_pts,
-        response.data.bench_points
-      ),
-    ];
-    return rows;
-  }
+  const generateTableColumn = (data) => {
+    if (!data || data.length === 0) {
+      return null;
+    }
+    return displayedTeamColumns.map((key) => (
+      <TableCell key={key} align="right">
+        {teamColumnNameMap[key]}
+      </TableCell>
+    ));
+  };
+
+  const generateTableRows = (data) => {
+    if (!data || data.length === 0) {
+      return null;
+    }
+    return data.map((row, index) => (
+      <TableRow key={index}>
+        {displayedTeamColumns.map((key) => {
+          if (key === 'season') {
+            let s = year + '-' + (parseInt(year) + 1);
+            return (
+              <TableCell key={key} align='right'>{s}</TableCell>
+            )
+          }
+          else if (key === 'field_goal_percentage') {
+            let fgp = ((row.field_goals_made / row.field_goals_att) * 100).toFixed(1);
+            return (
+              <TableCell key={key} align='right'>{fgp}</TableCell>
+            );
+          }
+          else if (key === 'three_point_percentage') {
+            let tpp = ((row.three_points_made / row.three_points_att) * 100).toFixed(1);
+            return (
+              <TableCell key={key} align='right'>{tpp}</TableCell>
+            );
+          }
+          else if (key === 'free_throw_percentage') {
+            let ftp = ((row.free_throws_made / row.free_throws_att) * 100).toFixed(1);
+            return (
+              <TableCell key={key} align='right'>{ftp}</TableCell>
+            );
+          }
+          else {
+            return(<TableCell key={key} align='right'>{row[key]}</TableCell>);
+          }
+        })}
+      </TableRow>
+    ));
+  };
 
   return (
     <div
@@ -165,67 +199,29 @@ export default function Home() {
             ))}
           </Select>
         </FormControl>
-        {/*
-        <Button
-          variant="contained"
-          size="small"
-          disableElevation
-          onClick={handleClick}
-        >
-          Open
-        </Button>
-        */}
       </div>
 
       {openTable && (
-        <div
-          style={{ marginTop: '20px', marginBottom: '20px' }}
-          overflow="auto"
+        <Box
+          style={{
+            marginTop: '20px',
+            marginBottom: '20px',
+            width: '100%',
+            maxWidth: '90%',
+            overflowX: 'auto',
+            borderRadius: '5px',
+            border: 'solid',
+          }}
         >
           <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 1500 }} aria-label="team table">
+            <Table aria-label="team table" size='small'>
               <TableHead>
-                <TableRow>
-                  <TableCell>Total</TableCell>
-                  <TableCell align="right">PTS</TableCell>
-                  <TableCell align="right">3PM</TableCell>
-                  <TableCell align="right">FGM</TableCell>
-                  <TableCell align="right">AST</TableCell>
-                  <TableCell align="right">REB</TableCell>
-                  <TableCell align="right">STL</TableCell>
-                  <TableCell align="right">BLK</TableCell>
-                  <TableCell align="right">TO</TableCell>
-                  <TableCell align="right">FB-PTS</TableCell>
-                  <TableCell align="right">SC-PTS</TableCell>
-                  <TableCell align="right">BNCH-PTS</TableCell>
-                </TableRow>
+                <TableRow>{generateTableColumn(teamStats)}</TableRow>
               </TableHead>
-              <TableBody>
-                {newRow.map((row) => (
-                  <TableRow
-                    key={row.team_name}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.team_name}
-                    </TableCell>
-                    <TableCell align="right">{row.points}</TableCell>
-                    <TableCell align="right">{row.three_points_made}</TableCell>
-                    <TableCell align="right">{row.field_goals_made}</TableCell>
-                    <TableCell align="right">{row.assists}</TableCell>
-                    <TableCell align="right">{row.rebounds}</TableCell>
-                    <TableCell align="right">{row.steals}</TableCell>
-                    <TableCell align="right">{row.blocks}</TableCell>
-                    <TableCell align="right">{row.turnovers}</TableCell>
-                    <TableCell align="right">{row.fast_break_pts}</TableCell>
-                    <TableCell align="right">{row.second_chance_pts}</TableCell>
-                    <TableCell align="right">{row.bench_points}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              <TableBody>{generateTableRows(teamStats)}</TableBody>
             </Table>
           </TableContainer>
-        </div>
+        </Box>
       )}
     </div>
   );
