@@ -24,6 +24,7 @@ import { yearList } from "../data/years";
 
 export default function Home() {
   // STATES
+  const [sports, getSports] = useState([]);
   const [team, setTeam] = useState("");
   const [teamNames, setTeamNames] = useState([]);
   const [year, setYear] = useState("");
@@ -40,7 +41,7 @@ export default function Home() {
     const getTeamNames = async () => {
       try {
         const response = await axios.get("/api/proxy/teamNames/");
-
+ 
         const filteredTeams = response.data.filter((team) =>
           nbaTeams.includes(team.market)
         );
@@ -51,12 +52,14 @@ export default function Home() {
     };
 
     const getYearNumbers = async () => {
-      setYearNumbers(yearList);
+      await setYearNumbers(yearList);
     };
 
     getYearNumbers();
     getTeamNames();
   }, []);
+
+  
 
   // Fetch team stats and players from backend API
   const fetchTeamStats = (selectedTeamObj, selectedYear) => {
@@ -70,6 +73,7 @@ export default function Home() {
           console.log("Team and player stats fetched successfully:", response.data);
           setTeamStats(response.data.teamStats);  // Update team stats state
           setPlayers(response.data.players);  // Update player data state
+          getSports(response.data.sports)
         })
         .catch((error) => {
           console.error("Error fetching team stats:", error);
@@ -77,6 +81,14 @@ export default function Home() {
     } else {
       console.log("Both team and year must be selected.");
     }
+  };
+  const handleSportChange = async (event) => {
+    const sport = event.target.value;
+    getSports(sport);
+
+    const selectedsportsObj = teamNames.find(
+      () => sportsObj.name === sport
+    ); fetchTeamStats(selectedsportsObj, sports);
   };
 
   const handleTeamChange = (e) => {
@@ -121,13 +133,29 @@ export default function Home() {
     router.push("/");  // Redirect to the home page (or any other path you define as the home)
   };
 
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
-    <div style={{ backgroundColor: "black", minHeight: "100vh", padding: "20px" }}>
+    <div style={{  backgroundImage:  "url('/images/data_page_background.jpg')", minHeight: "100vh", padding: "20px"}}>
       <Grid container spacing={3} justifyContent="center" alignItems="center">
         {/* Home Button */}
         <Grid item xs={12}>
           <Button
-            variant="outlined"
+            variant="outlined"s
             size="medium"
             onClick={goToHomePage}
             style={{
@@ -142,7 +170,7 @@ export default function Home() {
 
         {/* Title */}
         <Grid item xs={12}>
-          <Typography variant="h1" align="center" style={{ color: "white" }}>
+          <Typography variant="h1" align="center" style={{ color: "white"}}>
             Find Your Snapshot
           </Typography>
 
@@ -154,11 +182,39 @@ export default function Home() {
           )}
         </Grid>
 
+        
         {/* Dropdowns */}
+
+        <Grid item xs={12} md={4}>
+          <FormControl fullWidth>
+            <InputLabel id="sports-select-label" style={{ color: "white" }}>
+              Pick Your Sports
+            </InputLabel>
+            <Select
+              onChange={handleSportChange}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    bgcolor: "black",
+                    color: "white",
+                  },
+                },
+              }}
+            >
+              {sports.map((sportsObj) => (
+                <MenuItem key={sportsObj.id} value={sportsObj.name}>
+                  {sportsObj.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+
         <Grid item xs={12} md={4}>
           <FormControl fullWidth>
             <InputLabel id="team-select-label" style={{ color: "white" }}>
-              Team
+              Pick Your Favorite Team
             </InputLabel>
             <Select
               labelId="team-select-label"
@@ -188,7 +244,7 @@ export default function Home() {
         <Grid item xs={12} md={4}>
           <FormControl fullWidth>
             <InputLabel id="year-select-label" style={{ color: "white" }}>
-              Year
+              Pick a Year
             </InputLabel>
             <Select
               labelId="year-select-label"
@@ -215,11 +271,6 @@ export default function Home() {
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={4}>
-          <Button variant="contained" fullWidth size="large" onClick={handleClick}>
-            Open
-          </Button>
-        </Grid>
 
         {/* Table for team and player stats  - to update table*/}
         {open && (

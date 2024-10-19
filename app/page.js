@@ -1,3 +1,5 @@
+// THIS IS THE HOME PAGE WITH THE BASKET BALL BUTTON AND TEXTS
+
 "use client";
 import {
   Button,
@@ -32,8 +34,9 @@ export default function Home() {
         {/* Title */}
         <Grid item xs={12}>
           <Typography variant="h1" style={{ color: "white" }}>
-            Season
+            Seasons
           </Typography>
+          
           <Typography variant="h1" style={{ color: "white" }}>
             Snapshot
           </Typography>
@@ -44,11 +47,9 @@ export default function Home() {
 
         {/* Button */}
         <Grid item xs={12}>
-          <Link href="/data_entry_page">
-            <Button variant="contained" size="large">
+            <Button href="/data_entry_page" variant="contained" size="large">
               Get Started
             </Button>
-          </Link>
         </Grid>
       </Grid>
     </div>
