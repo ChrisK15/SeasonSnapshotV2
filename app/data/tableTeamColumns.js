@@ -1,6 +1,10 @@
 export const displayedTeamColumns = [
   'season',
+  'games_played',
   'points',
+  'wins',
+  'losses',
+  'win_percentage',
   'field_goals_made',
   'field_goals_att',
   'field_goal_percentage', // custom
@@ -22,7 +26,11 @@ export const displayedTeamColumns = [
 
 export const teamColumnNameMap = {
   season: 'Season',
+  games_played: 'GP',
   points: 'PTS',
+  wins: 'W',
+  losses: 'L',
+  win_percentage: 'WIN%',
   field_goals_made: 'FGM',
   field_goals_att: 'FGA',
   field_goal_percentage: 'FG%',
