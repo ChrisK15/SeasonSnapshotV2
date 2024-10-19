@@ -1,6 +1,7 @@
 export const displayedTeamColumns = [
   'season',
   'games_played',
+  'minutes',
   'points',
   'wins',
   'losses',
@@ -27,6 +28,7 @@ export const displayedTeamColumns = [
 export const teamColumnNameMap = {
   season: 'Season',
   games_played: 'GP',
+  minutes: 'MIN',
   points: 'PTS',
   wins: 'W',
   losses: 'L',
