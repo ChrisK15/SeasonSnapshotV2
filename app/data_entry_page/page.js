@@ -87,6 +87,19 @@ export default function Home() {
     }
   }, [teamID, year]);
 
+  useEffect(() => {
+    axios
+      .post('/api/proxy/teamStandings', {
+        year: year,
+      })
+      .then((response) => {
+        console.log('Standings fetched successfully', response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching standings:', error);
+      });
+  }, []);
+
   // FUNCTIONS
   const handleTeamChange = (e) => {
     const teamName = e.target.value;
@@ -103,6 +116,8 @@ export default function Home() {
     const selectedYear = e.target.value;
     setYear(selectedYear);
   };
+
+  // const getWinLossRecord = (data)
 
   const generateTeamTableColumn = (data) => {
     if (!data || data.length === 0) {
