@@ -83,7 +83,6 @@ export default function Home() {
               conference.divisions.flatMap((division) => division.teams)
             )
             .find((team) => team.id === teamID);
-          console.log(standings);
           if (standings) {
             setTeamStats((prevStats) => {
               return prevStats.map((stat) => ({
@@ -96,8 +95,7 @@ export default function Home() {
                   (standings.wins + standings.losses)
                 ).toFixed(3),
               }));
-            }),
-              console.log(teamStats);
+            })
           }
         })
         .catch((error) => {
@@ -112,12 +110,9 @@ export default function Home() {
           year: year,
         });
         const { teamStats, players } = response.data;
-        //console.log(teamStats);
         setTeamStats([teamStats]);
         setPlayerStats(players);
-
-        // Wait till above states are set, then:
-        await postTeamStanding();
+        postTeamStanding();
 
         setLoading(false);
         setOpenTable(true);
@@ -239,43 +234,11 @@ export default function Home() {
     return data.map((row, index) => (
       <TableRow key={index}>
         {displayedPlayerColumns.map((key) => {
-          if (key === 'field_goal_percentage') {
-            let fgp = (
-              (row.field_goals_made / row.field_goals_att) *
-              100
-            ).toFixed(1);
-            return (
-              <TableCell key={key} align="right">
-                {fgp}
-              </TableCell>
-            );
-          } else if (key === 'three_point_percentage') {
-            let tpp = (
-              (row.three_points_made / row.three_points_att) *
-              100
-            ).toFixed(1);
-            return (
-              <TableCell key={key} align="right">
-                {tpp}
-              </TableCell>
-            );
-          } else if (key === 'free_throw_percentage') {
-            let ftp = (
-              (row.free_throws_made / row.free_throws_att) *
-              100
-            ).toFixed(1);
-            return (
-              <TableCell key={key} align="right">
-                {ftp}
-              </TableCell>
-            );
-          } else {
             return (
               <TableCell key={key} align="right">
                 {row[key]}
               </TableCell>
             );
-          }
         })}
       </TableRow>
     ));
@@ -378,7 +341,7 @@ export default function Home() {
               }}
             >
               <TableContainer component={Paper}>
-                <Table aria-label="team table" size="small">
+                <Table aria-label="player table" size="small">
                   <TableHead>
                     <TableRow>{generatePlayerTableColumn(playerStats)}</TableRow>
                   </TableHead>

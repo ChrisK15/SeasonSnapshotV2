@@ -5,16 +5,16 @@ export const displayedPlayerColumns = [
   'points',
   'field_goals_made',
   'field_goals_att',
-  'field_goal_percentage', // custom
+  'field_goals_pct', // custom
   'three_points_made',
   'three_points_att',
-  'three_point_percentage', // custom
+  'three_points_pct', // custom
   'free_throws_made',
   'free_throws_att',
-  'free_throw_percentage', // custom
+  'free_throws_pct', // custom
   'off_rebounds',
   'def_rebounds',
-  'rebounds', // custom
+  'rebounds',
   'assists',
   'turnovers',
   'steals',
@@ -29,13 +29,13 @@ export const playerColumnNameMap = {
   points: 'PTS',
   field_goals_made: 'FGM',
   field_goals_att: 'FGA',
-  field_goal_percentage: 'FG%',
+  field_goals_pct: 'FG%',
   three_points_made: '3PM',
   three_points_att: '3PA',
-  three_point_percentage: '3P%',
+  three_points_pct: '3P%',
   free_throws_made: 'FTM',
   free_throws_att: 'FTA',
-  free_throw_percentage: 'FT%',
+  free_throws_pct: 'FT%',
   off_rebounds: 'OREB',
   def_rebounds: 'DREB',
   rebounds: 'REB',
