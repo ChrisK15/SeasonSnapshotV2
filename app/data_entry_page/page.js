@@ -32,6 +32,7 @@ import {
   teamColumnNameMap,
 } from '../data/tableTeamColumns';
 import { yearList } from '../data/years';
+import { displayedPlayerColumns, playerColumnNameMap } from '../data/tablePlayerColumns';
 
 export default function Home() {
   // STATES
@@ -82,7 +83,6 @@ export default function Home() {
               conference.divisions.flatMap((division) => division.teams)
             )
             .find((team) => team.id === teamID);
-          console.log(standings);
           if (standings) {
             setTeamStats((prevStats) => {
               return prevStats.map((stat) => ({
@@ -95,8 +95,7 @@ export default function Home() {
                   (standings.wins + standings.losses)
                 ).toFixed(3),
               }));
-            }),
-              console.log(teamStats);
+            })
           }
         })
         .catch((error) => {
@@ -111,12 +110,9 @@ export default function Home() {
           year: year,
         });
         const { teamStats, players } = response.data;
-        //console.log(teamStats);
         setTeamStats([teamStats]);
         setPlayerStats(players);
-
-        // Wait till above states are set, then:
-        await postTeamStanding();
+        postTeamStanding();
 
         setLoading(false);
         setOpenTable(true);
@@ -163,19 +159,19 @@ export default function Home() {
     ));
   };
 
-  // const generatePlayerTableColumn = (data) => {
-  //   if (!data || data.length === 0) {
-  //     return null;
-  //   }
-  //   return displayedTeamColumns.map((key) => (
-  //     <TableCell key={key} align="right">
-  //       {teamColumnNameMap[key]}
-  //     </TableCell>
-  //   ));
-  // };
+  const generatePlayerTableColumn = (data) => {
+    if (!data || data.length === 0) {
+      return null;
+    }
+    return displayedPlayerColumns.map((key) => (
+      <TableCell key={key} align="right">
+        {playerColumnNameMap[key]}
+      </TableCell>
+    ));
+  };
 
   // this function is painful to look at xD
-  const generateTableRows = (data) => {
+  const generateTeamTableRows = (data) => {
     if (!data || data.length === 0) {
       return null;
     }
@@ -219,13 +215,6 @@ export default function Home() {
                 {ftp}
               </TableCell>
             );
-            // } else if (key === 'win_percentage') {
-            //   let wp = ((row.wins / (row.wins + row.losses)) * 100).toFixed(1);
-            //   return (
-            //     <TableCell key={key} align="right">
-            //       {wp}
-            //     </TableCell>
-            //   );
           } else {
             return (
               <TableCell key={key} align="right">
@@ -233,6 +222,23 @@ export default function Home() {
               </TableCell>
             );
           }
+        })}
+      </TableRow>
+    ));
+  };
+
+  const generatePlayerTableRows = (data) => {
+    if (!data || data.length === 0) {
+      return null;
+    }
+    return data.map((row, index) => (
+      <TableRow key={index}>
+        {displayedPlayerColumns.map((key) => {
+            return (
+              <TableCell key={key} align="right">
+                {row[key]}
+              </TableCell>
+            );
         })}
       </TableRow>
     ));
@@ -318,7 +324,28 @@ export default function Home() {
                   <TableHead>
                     <TableRow>{generateTeamTableColumn(teamStats)}</TableRow>
                   </TableHead>
-                  <TableBody>{generateTableRows(teamStats)}</TableBody>
+                  <TableBody>{generateTeamTableRows(teamStats)}</TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+
+            <Box
+              style={{
+                marginTop: '20px',
+                marginBottom: '20px',
+                width: '100%',
+                maxWidth: '100%',
+                overflowX: 'auto',
+                borderRadius: '6px',
+                border: 'solid',
+              }}
+            >
+              <TableContainer component={Paper}>
+                <Table aria-label="player table" size="small">
+                  <TableHead>
+                    <TableRow>{generatePlayerTableColumn(playerStats)}</TableRow>
+                  </TableHead>
+                  <TableBody>{generatePlayerTableRows(playerStats)}</TableBody>
                 </Table>
               </TableContainer>
             </Box>
