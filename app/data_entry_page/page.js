@@ -32,6 +32,7 @@ import {
   teamColumnNameMap,
 } from '../data/tableTeamColumns';
 import { yearList } from '../data/years';
+import { displayedPlayerColumns, playerColumnNameMap } from '../data/tablePlayerColumns';
 
 export default function Home() {
   // STATES
@@ -163,19 +164,19 @@ export default function Home() {
     ));
   };
 
-  // const generatePlayerTableColumn = (data) => {
-  //   if (!data || data.length === 0) {
-  //     return null;
-  //   }
-  //   return displayedTeamColumns.map((key) => (
-  //     <TableCell key={key} align="right">
-  //       {teamColumnNameMap[key]}
-  //     </TableCell>
-  //   ));
-  // };
+  const generatePlayerTableColumn = (data) => {
+    if (!data || data.length === 0) {
+      return null;
+    }
+    return displayedPlayerColumns.map((key) => (
+      <TableCell key={key} align="right">
+        {playerColumnNameMap[key]}
+      </TableCell>
+    ));
+  };
 
   // this function is painful to look at xD
-  const generateTableRows = (data) => {
+  const generateTeamTableRows = (data) => {
     if (!data || data.length === 0) {
       return null;
     }
@@ -219,13 +220,55 @@ export default function Home() {
                 {ftp}
               </TableCell>
             );
-            // } else if (key === 'win_percentage') {
-            //   let wp = ((row.wins / (row.wins + row.losses)) * 100).toFixed(1);
-            //   return (
-            //     <TableCell key={key} align="right">
-            //       {wp}
-            //     </TableCell>
-            //   );
+          } else {
+            return (
+              <TableCell key={key} align="right">
+                {row[key]}
+              </TableCell>
+            );
+          }
+        })}
+      </TableRow>
+    ));
+  };
+
+  const generatePlayerTableRows = (data) => {
+    if (!data || data.length === 0) {
+      return null;
+    }
+    return data.map((row, index) => (
+      <TableRow key={index}>
+        {displayedPlayerColumns.map((key) => {
+          if (key === 'field_goal_percentage') {
+            let fgp = (
+              (row.field_goals_made / row.field_goals_att) *
+              100
+            ).toFixed(1);
+            return (
+              <TableCell key={key} align="right">
+                {fgp}
+              </TableCell>
+            );
+          } else if (key === 'three_point_percentage') {
+            let tpp = (
+              (row.three_points_made / row.three_points_att) *
+              100
+            ).toFixed(1);
+            return (
+              <TableCell key={key} align="right">
+                {tpp}
+              </TableCell>
+            );
+          } else if (key === 'free_throw_percentage') {
+            let ftp = (
+              (row.free_throws_made / row.free_throws_att) *
+              100
+            ).toFixed(1);
+            return (
+              <TableCell key={key} align="right">
+                {ftp}
+              </TableCell>
+            );
           } else {
             return (
               <TableCell key={key} align="right">
@@ -318,7 +361,28 @@ export default function Home() {
                   <TableHead>
                     <TableRow>{generateTeamTableColumn(teamStats)}</TableRow>
                   </TableHead>
-                  <TableBody>{generateTableRows(teamStats)}</TableBody>
+                  <TableBody>{generateTeamTableRows(teamStats)}</TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+
+            <Box
+              style={{
+                marginTop: '20px',
+                marginBottom: '20px',
+                width: '100%',
+                maxWidth: '100%',
+                overflowX: 'auto',
+                borderRadius: '6px',
+                border: 'solid',
+              }}
+            >
+              <TableContainer component={Paper}>
+                <Table aria-label="team table" size="small">
+                  <TableHead>
+                    <TableRow>{generatePlayerTableColumn(playerStats)}</TableRow>
+                  </TableHead>
+                  <TableBody>{generatePlayerTableRows(playerStats)}</TableBody>
                 </Table>
               </TableContainer>
             </Box>
