@@ -53,8 +53,9 @@ export default function Home() {
         const response = await axios.get('/api/proxy/teamNames/');
 
         const filteredTeams = response.data.filter((team) =>
-          nbaTeams.includes(team.market)
+          nbaTeams.some(nbaTeam => nbaTeam.name === team.market)
         );
+        
         setTeamNames(filteredTeams);
       } catch (err) {
         console.error('Error fetching team names:', err.message);
@@ -243,43 +244,39 @@ export default function Home() {
       </TableRow>
     ));
   };
+  const handleTeamChangeFromList = (teamName) => {
+    if(!year){
+      alert("Choose a year.")
+    }else{
+      setTeam(teamName);
+      const selectedTeamObj = teamNames.find((teamObj) => teamObj.name === teamName);
+      if(selectedTeamObj){
+        setTeamID(selectedTeamObj.id);
+      }
+    }
+  }
 
   return (
     <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <Typography variant="h1">Season Snapshot</Typography>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <FormControl sx={{ m: 1, minWidth: 80 }}>
-          <InputLabel id="team-select-label">Team</InputLabel>
-          <Select
-            labelId="team-select-label"
-            id="team-select"
-            value={team}
-            onChange={handleTeamChange}
-            autoWidth
-            label="Team"
-          >
-            {teamNames.map((teamObj) => (
-              <MenuItem key={teamObj.id} value={teamObj.name}>
-                {teamObj.market} {teamObj.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      paddingTop: '20px',
+    }}
+  >
+    <Typography variant="h1">Season Snapshot</Typography>
 
-        <FormControl sx={{ m: 1, minWidth: 80 }}>
+    
+    {!teamID || !year ? (
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+        <FormControl sx={{ minWidth: 100 }}>
           <InputLabel id="year-select-label">Year</InputLabel>
           <Select
             labelId="year-select-label"
             id="year-select"
             value={year}
             onChange={handleYearChange}
-            autoWidth
             label="Years"
           >
             {yearNumbers.map((yearObj) => (
@@ -290,68 +287,109 @@ export default function Home() {
           </Select>
         </FormControl>
       </div>
+    ) : null}
 
-      {loading ? (
-        <CircularProgress
+    <div style={{ display: 'flex', width: '100%' }}>
+      {!teamID || !year ? (
+        <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'column',
+            width: '200px',
+            textAlign: 'left',
+            marginRight: '40px',
+            marginLeft: '40px',
           }}
-        />
-      ) : (
-        openTable && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-            }}
-          >
-            <Box
-              style={{
-                marginTop: '20px',
-                marginBottom: '20px',
-                width: '100%',
-                maxWidth: '100%',
-                overflowX: 'auto',
-                borderRadius: '6px',
-                border: 'solid',
-              }}
-            >
-              <TableContainer component={Paper}>
-                <Table aria-label="team table" size="small">
-                  <TableHead>
-                    <TableRow>{generateTeamTableColumn(teamStats)}</TableRow>
-                  </TableHead>
-                  <TableBody>{generateTeamTableRows(teamStats)}</TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
+        >
 
-            <Box
-              style={{
-                marginTop: '20px',
-                marginBottom: '20px',
-                width: '100%',
-                maxWidth: '100%',
-                overflowX: 'auto',
-                borderRadius: '6px',
-                border: 'solid',
-              }}
-            >
-              <TableContainer component={Paper}>
-                <Table aria-label="player table" size="small">
-                  <TableHead>
-                    <TableRow>{generatePlayerTableColumn(playerStats)}</TableRow>
-                  </TableHead>
-                  <TableBody>{generatePlayerTableRows(playerStats)}</TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          </div>
-        )
-      )}
+          <Typography variant="h6" style={{ marginBottom: '10px' }}>
+            NBA
+          </Typography>
+
+          
+          {Object.entries(
+            teamNames.reduce((acc, teamObj) => {
+              const division = nbaTeams.find((nbaTeam) => nbaTeam.name === teamObj.market)?.division;
+              if (!acc[division]) acc[division] = [];
+              acc[division].push(teamObj);
+              return acc;
+            }, {})
+          ).map(([division, teams]) => (
+            <div key={division} style={{ marginBottom: '20px' }}>
+              <Typography variant="h6">{division}</Typography>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {teams.map((teamObj) => (
+                  <Typography
+                    key={teamObj.id}
+                    variant="body1"
+                    component="a"
+                    href="#"
+                    onClick={() => handleTeamChangeFromList(teamObj.name)}
+                    style={{ margin: '5px 0', cursor: 'pointer', color: '#1e88e5', textDecoration: 'none' }}
+                  >
+                    {teamObj.market} {teamObj.name}
+                  </Typography>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      <div style={{ flexGrow: 1 }}>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          openTable && (
+            <div>
+              <Box
+                style={{
+                  marginTop: '40px',
+                  marginBottom: '40px',
+                  marginLeft: '20px',
+                  marginRight: '20px',
+                  width: 'auto',
+                  overflowX: 'auto',
+                  borderRadius: '6px',
+                  border: 'solid 1px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <TableContainer component={Paper}>
+                  <Table aria-label="team table" size="small">
+                    <TableHead>
+                      <TableRow>{generateTeamTableColumn(teamStats)}</TableRow>
+                    </TableHead>
+                    <TableBody>{generateTeamTableRows(teamStats)}</TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+
+              <Box
+                style={{
+                  marginTop: '40px',
+                  marginBottom: '40px',
+                  marginLeft: '20px',
+                  marginRight: '20px',
+                  width: 'auto',
+                  overflowX: 'auto',
+                  borderRadius: '6px',
+                  border: 'solid 1px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <TableContainer component={Paper}>
+                  <Table aria-label="player table" size="small">
+                    <TableHead>
+                      <TableRow>{generatePlayerTableColumn(playerStats)}</TableRow>
+                    </TableHead>
+                    <TableBody>{generatePlayerTableRows(playerStats)}</TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+            </div>
+          )
+        )}
+      </div>
     </div>
+  </div>
   );
 }
