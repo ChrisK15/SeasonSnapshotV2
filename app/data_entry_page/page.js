@@ -53,8 +53,9 @@ export default function Home() {
         const response = await axios.get('/api/proxy/teamNames/');
 
         const filteredTeams = response.data.filter((team) =>
-          nbaTeams.includes(team.market)
+          nbaTeams.some(nbaTeam => nbaTeam.name === team.market)
         );
+        
         setTeamNames(filteredTeams);
       } catch (err) {
         console.error('Error fetching team names:', err.message);
@@ -243,72 +244,97 @@ export default function Home() {
       </TableRow>
     ));
   };
+  const handleTeamChangeFromList = (teamName) => {
+    if(!year){
+      alert("Choose a year.")
+    }else{
+      setTeam(teamName);
+      const selectedTeamObj = teamNames.find((teamObj) => teamObj.name === teamName);
+      if(selectedTeamObj){
+        setTeamID(selectedTeamObj.id);
+      }
+    }
+  }
 
   return (
     <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <Typography variant="h1">Season Snapshot</Typography>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <FormControl sx={{ m: 1, minWidth: 80 }}>
-          <InputLabel id="team-select-label">Team</InputLabel>
-          <Select
-            labelId="team-select-label"
-            id="team-select"
-            value={team}
-            onChange={handleTeamChange}
-            autoWidth
-            label="Team"
-          >
-            {teamNames.map((teamObj) => (
-              <MenuItem key={teamObj.id} value={teamObj.name}>
-                {teamObj.market} {teamObj.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center', // Centers the entire main content
+      paddingTop: '20px',
+    }}
+  >
+    <Typography variant="h1">Season Snapshot</Typography>
+    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+      <FormControl sx={{ minWidth: 100 }}>
+        <InputLabel id="year-select-label">Year</InputLabel>
+        <Select
+          labelId="year-select-label"
+          id="year-select"
+          value={year}
+          onChange={handleYearChange}
+          label="Years"
+        >
+          {yearNumbers.map((yearObj) => (
+            <MenuItem key={yearObj} value={yearObj}>
+              {yearObj}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
 
-        <FormControl sx={{ m: 1, minWidth: 80 }}>
-          <InputLabel id="year-select-label">Year</InputLabel>
-          <Select
-            labelId="year-select-label"
-            id="year-select"
-            value={year}
-            onChange={handleYearChange}
-            autoWidth
-            label="Years"
-          >
-            {yearNumbers.map((yearObj) => (
-              <MenuItem key={yearObj} value={yearObj}>
-                {yearObj}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+    <div style={{ display: 'flex', width: '100%' }}>
+      <div
+        style={{
+          width: '200px',
+          textAlign: 'left',
+          marginRight: '40px',
+          marginLeft: '40px',
+        }}
+      >
+        <Typography variant="h6" style={{ marginBottom: '10px' }}>
+          NBA
+        </Typography>
+
+        {/* Group teams by division */}
+        {Object.entries(
+          teamNames.reduce((acc, teamObj) => {
+            const division = nbaTeams.find((nbaTeam) => nbaTeam.name === teamObj.market)?.division;
+            if (!acc[division]) acc[division] = [];
+            acc[division].push(teamObj);
+            return acc;
+          }, {})
+        ).map(([division, teams]) => (
+          <div key={division} style={{ marginBottom: '20px' }}>
+            <Typography variant="h6">{division}</Typography>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {teams.map((teamObj) => (
+                <Typography
+                  key={teamObj.id}
+                  variant="body1"
+                  component="a"
+                  href="#"
+                  onClick={() => handleTeamChangeFromList(teamObj.name)}
+                  style={{ margin: '5px 0', cursor: 'pointer', color: '#1e88e5', textDecoration: 'none' }}
+                >
+                  {teamObj.market} {teamObj.name}
+                </Typography>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
 
-      {loading ? (
-        <CircularProgress
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}
-        />
-      ) : (
-        openTable && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'column',
-            }}
-          >
-            <Box
+      {/* Content section */}
+      <div style={{ flexGrow: 1 }}>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          openTable && (
+            <div>
+              <Box
               style={{
                 marginTop: '20px',
                 marginBottom: '20px',
@@ -349,9 +375,11 @@ export default function Home() {
                 </Table>
               </TableContainer>
             </Box>
-          </div>
-        )
-      )}
+            </div>
+          )
+        )}
+      </div>
     </div>
+  </div>
   );
 }
