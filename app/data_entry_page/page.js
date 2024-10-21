@@ -261,73 +261,79 @@ export default function Home() {
     style={{
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center', // Centers the entire main content
+      alignItems: 'center',
       paddingTop: '20px',
     }}
   >
     <Typography variant="h1">Season Snapshot</Typography>
-    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-      <FormControl sx={{ minWidth: 100 }}>
-        <InputLabel id="year-select-label">Year</InputLabel>
-        <Select
-          labelId="year-select-label"
-          id="year-select"
-          value={year}
-          onChange={handleYearChange}
-          label="Years"
-        >
-          {yearNumbers.map((yearObj) => (
-            <MenuItem key={yearObj} value={yearObj}>
-              {yearObj}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+
+    
+    {!teamID || !year ? (
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+        <FormControl sx={{ minWidth: 100 }}>
+          <InputLabel id="year-select-label">Year</InputLabel>
+          <Select
+            labelId="year-select-label"
+            id="year-select"
+            value={year}
+            onChange={handleYearChange}
+            label="Years"
+          >
+            {yearNumbers.map((yearObj) => (
+              <MenuItem key={yearObj} value={yearObj}>
+                {yearObj}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+    ) : null}
 
     <div style={{ display: 'flex', width: '100%' }}>
-      <div
-        style={{
-          width: '200px',
-          textAlign: 'left',
-          marginRight: '40px',
-          marginLeft: '40px',
-        }}
-      >
-        <Typography variant="h6" style={{ marginBottom: '10px' }}>
-          NBA
-        </Typography>
+      {!teamID || !year ? (
+        <div
+          style={{
+            width: '200px',
+            textAlign: 'left',
+            marginRight: '40px',
+            marginLeft: '40px',
+          }}
+        >
 
-        {/* Group teams by division */}
-        {Object.entries(
-          teamNames.reduce((acc, teamObj) => {
-            const division = nbaTeams.find((nbaTeam) => nbaTeam.name === teamObj.market)?.division;
-            if (!acc[division]) acc[division] = [];
-            acc[division].push(teamObj);
-            return acc;
-          }, {})
-        ).map(([division, teams]) => (
-          <div key={division} style={{ marginBottom: '20px' }}>
-            <Typography variant="h6">{division}</Typography>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              {teams.map((teamObj) => (
-                <Typography
-                  key={teamObj.id}
-                  variant="body1"
-                  component="a"
-                  href="#"
-                  onClick={() => handleTeamChangeFromList(teamObj.name)}
-                  style={{ margin: '5px 0', cursor: 'pointer', color: '#1e88e5', textDecoration: 'none' }}
-                >
-                  {teamObj.market} {teamObj.name}
-                </Typography>
-              ))}
+          <Typography variant="h6" style={{ marginBottom: '10px' }}>
+            NBA
+          </Typography>
+
+          
+          {Object.entries(
+            teamNames.reduce((acc, teamObj) => {
+              const division = nbaTeams.find((nbaTeam) => nbaTeam.name === teamObj.market)?.division;
+              if (!acc[division]) acc[division] = [];
+              acc[division].push(teamObj);
+              return acc;
+            }, {})
+          ).map(([division, teams]) => (
+            <div key={division} style={{ marginBottom: '20px' }}>
+              <Typography variant="h6">{division}</Typography>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {teams.map((teamObj) => (
+                  <Typography
+                    key={teamObj.id}
+                    variant="body1"
+                    component="a"
+                    href="#"
+                    onClick={() => handleTeamChangeFromList(teamObj.name)}
+                    style={{ margin: '5px 0', cursor: 'pointer', color: '#1e88e5', textDecoration: 'none' }}
+                  >
+                    {teamObj.market} {teamObj.name}
+                  </Typography>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : null}
 
-      {/* Content section */}
       <div style={{ flexGrow: 1 }}>
         {loading ? (
           <CircularProgress />
@@ -335,46 +341,50 @@ export default function Home() {
           openTable && (
             <div>
               <Box
-              style={{
-                marginTop: '20px',
-                marginBottom: '20px',
-                width: '100%',
-                maxWidth: '100%',
-                overflowX: 'auto',
-                borderRadius: '6px',
-                border: 'solid',
-              }}
-            >
-              <TableContainer component={Paper}>
-                <Table aria-label="team table" size="small">
-                  <TableHead>
-                    <TableRow>{generateTeamTableColumn(teamStats)}</TableRow>
-                  </TableHead>
-                  <TableBody>{generateTeamTableRows(teamStats)}</TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
+                style={{
+                  marginTop: '40px',
+                  marginBottom: '40px',
+                  marginLeft: '20px',
+                  marginRight: '20px',
+                  width: 'auto',
+                  overflowX: 'auto',
+                  borderRadius: '6px',
+                  border: 'solid 1px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <TableContainer component={Paper}>
+                  <Table aria-label="team table" size="small">
+                    <TableHead>
+                      <TableRow>{generateTeamTableColumn(teamStats)}</TableRow>
+                    </TableHead>
+                    <TableBody>{generateTeamTableRows(teamStats)}</TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
 
-            <Box
-              style={{
-                marginTop: '20px',
-                marginBottom: '20px',
-                width: '100%',
-                maxWidth: '100%',
-                overflowX: 'auto',
-                borderRadius: '6px',
-                border: 'solid',
-              }}
-            >
-              <TableContainer component={Paper}>
-                <Table aria-label="player table" size="small">
-                  <TableHead>
-                    <TableRow>{generatePlayerTableColumn(playerStats)}</TableRow>
-                  </TableHead>
-                  <TableBody>{generatePlayerTableRows(playerStats)}</TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
+              <Box
+                style={{
+                  marginTop: '40px',
+                  marginBottom: '40px',
+                  marginLeft: '20px',
+                  marginRight: '20px',
+                  width: 'auto',
+                  overflowX: 'auto',
+                  borderRadius: '6px',
+                  border: 'solid 1px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <TableContainer component={Paper}>
+                  <Table aria-label="player table" size="small">
+                    <TableHead>
+                      <TableRow>{generatePlayerTableColumn(playerStats)}</TableRow>
+                    </TableHead>
+                    <TableBody>{generatePlayerTableRows(playerStats)}</TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
             </div>
           )
         )}
