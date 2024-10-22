@@ -122,7 +122,6 @@ export default function Home() {
         setLoading(false);
       }
     };
-
     if (teamID && year) {
       // postTeamStanding();
       setLoading(true);
@@ -258,13 +257,13 @@ export default function Home() {
 
   return (
     <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      paddingTop: '20px',
-    }}
-  >
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: '20px',
+      }}
+    >
     <Typography variant="h1">Season Snapshot</Typography>
 
     
