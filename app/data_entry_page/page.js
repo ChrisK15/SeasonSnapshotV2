@@ -17,7 +17,6 @@ import useTeamData from '../hooks/useTeamData';
 import usePlayerData from '../hooks/usePlayerData';
 import useTeamNamesData from '../hooks/useTeamNamesData';
 import { nbaTeams } from '../data/teams';
-import { yearList } from '../data/years';
 
 export default function Home() {
   // STATES
