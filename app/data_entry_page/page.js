@@ -52,7 +52,7 @@ export default function Home() {
       );
       if (selectedTeamObj) {
         setTeamID(selectedTeamObj.id);
-        setOpenTable(true); // NEW LINE
+        setOpenTable(true);
       }
     }
   };
