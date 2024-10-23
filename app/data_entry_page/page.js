@@ -15,16 +15,15 @@ import TeamTable from '../components/TeamTable';
 import PlayerTable from '../components/PlayerTable';
 import useTeamData from '../hooks/useTeamData';
 import usePlayerData from '../hooks/usePlayerData';
+import useTeamNamesData from '../hooks/useTeamNamesData';
 import { nbaTeams } from '../data/teams';
 import { yearList } from '../data/years';
 
 export default function Home() {
   // STATES
   const [team, setTeam] = useState('');
-  const [teamNames, setTeamNames] = useState([]);
   const [teamID, setTeamID] = useState('');
   const [year, setYear] = useState('');
-  const [yearNumbers, setYearNumbers] = useState([]);
   const [openTable, setOpenTable] = useState(false);
 
   const {
@@ -37,30 +36,7 @@ export default function Home() {
     loading: playerLoading,
     error: playerError,
   } = usePlayerData(teamID, year);
-
-  // API stuff, everything happening here is in unison with the route.js files in the app/api/proxy folder
-  useEffect(() => {
-    const getTeamNames = async () => {
-      try {
-        const response = await axios.get('/api/proxy/teamNames/');
-
-        const filteredTeams = response.data.filter((team) =>
-          nbaTeams.some((nbaTeam) => nbaTeam.name === team.market)
-        );
-
-        setTeamNames(filteredTeams);
-      } catch (err) {
-        console.error('Error fetching team names:', err.message);
-      }
-    };
-
-    const getYearNumbers = async () => {
-      setYearNumbers(yearList);
-    };
-
-    getYearNumbers();
-    getTeamNames();
-  }, []);
+  const { teamNames, yearNumbers, error: teamNameError } = useTeamNamesData();
 
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;

@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import { nbaTeams } from '../data/teams';
+import { yearList } from '../data/years';
+
 const useTeamNamesData = () => {
   const [teamNames, setTeamNames] = useState([]);
+  const [yearNumbers, setYearNumbers] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -21,11 +25,15 @@ const useTeamNamesData = () => {
       }
     };
 
-    const getYearNumbers = async () => {
+    const fetchYearNumbers = async () => {
       setYearNumbers(yearList);
     };
 
-    getYearNumbers();
-    getTeamNames();
+    fetchTeamNames();
+    fetchYearNumbers();
   }, []);
+
+  return { teamNames, yearNumbers, error };
 };
+
+export default useTeamNamesData;
