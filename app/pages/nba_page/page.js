@@ -7,6 +7,7 @@ import {
   Select,
   Typography,
   CircularProgress,
+  Button,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -66,6 +67,21 @@ export default function Home() {
         paddingTop: '20px',
       }}
     >
+      <Button
+        variant="outlined"
+        size="medium"
+        color="primary"
+        onClick={() => (window.location.href = '/')}
+        style={{
+          color: 'black',
+          borderColor: 'black',
+          position: 'absolute',
+          top: '20px',
+          left: '20px',
+        }}
+      >
+        Home
+      </Button>
       <Typography variant="h1">Season Snapshot</Typography>
 
       {!teamID || !year ? (
