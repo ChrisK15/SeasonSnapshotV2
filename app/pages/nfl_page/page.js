@@ -3,9 +3,10 @@
 // -------
 // Imports
 // -------
-
+import NFLTeamTable from '../../components/NFLTeamTable'; // Import NFL-specific TeamTable component
+import useNFLTeamData from '../../hooks/useNFLTeamData';  // Import NFL-specific data hook
 import React, { useEffect, useState } from 'react';
-import useNFLTeamsData from '../../hooks/useNFLTeamsData';
+import useNFLTeamNamesData from '../../hooks/useNFLTeamNamesData';
 import { nflTeams } from '@/app/data/nflTeams';
 import {
   Box,
@@ -23,23 +24,18 @@ export default function NFLPage() {
   // State variables
   // ---------------
   const [year, setYear] = useState('');
-  const { teamNames, yearNumbers, error } = useNFLTeamsData();
+  const { teamNames, yearNumbers, error: teamNamesError } = useNFLTeamNamesData();
   const [team, setTeam] = useState('');
   const [teamID, setTeamID] = useState('');
   const [openTable, setOpenTable] = useState(false);
+
+  // Custom hook to fetch NFL team stats
+  const { teamStats, loading: teamLoading, error: teamStatsError } = useNFLTeamData(teamID, year);
 
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;
     setYear(selectedYear);
   };
-
-  if (error) {
-    return <div>Error loading NFL teams: {error.message}</div>;
-  }
-
-  if (!teamNames.length) {
-    return <div>Loading NFL teams...</div>;
-  }
 
   const handleTeamChangeFromList = (teamName) => {
     if (!year) {
@@ -56,14 +52,18 @@ export default function NFLPage() {
     }
   };
 
+  // Handle errors
+  if (teamNamesError) {
+    return <div>Error loading NFL teams: {teamNamesError.message}</div>;
+  }
+
+  if (!teamNames.length) {
+    return <div>Loading NFL teams...</div>;
+  }
+
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      paddingTop: '20px',
-    }}>
-      {/* Button to return to homepage. */}
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '20px' }}>
+      {/* Button to return to homepage */}
       <Button
         variant="outlined"
         size="medium"
@@ -85,51 +85,34 @@ export default function NFLPage() {
 
       {/* Year Drop-down Menu*/}
       {!teamID || !year ? (
-        <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginBottom: '20px',
-        }}
-      >
-        <FormControl sx={{ minWidth: 100 }}>
-          <InputLabel id="year-select-label">Year</InputLabel>
-          <Select
-            labelId="year-select-label"
-            id="year-select"
-            value={year}
-            onChange={handleYearChange}
-            label="Years"
-          >
-            {yearNumbers.map((yearObj) => (
-              <MenuItem key={yearObj} value={yearObj}>
-                {yearObj}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+          <FormControl sx={{ minWidth: 100 }}>
+            <InputLabel id="year-select-label">Year</InputLabel>
+            <Select
+              labelId="year-select-label"
+              id="year-select"
+              value={year}
+              onChange={handleYearChange}
+              label="Years"
+            >
+              {yearNumbers.map((yearObj) => (
+                <MenuItem key={yearObj} value={yearObj}>
+                  {yearObj}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
       ) : null}
 
       {/* NFL Teams List */}
       {!teamID || !year ? (
-          <div
-          style={{
-            width: '200px',
-            textAlign: 'left',
-            marginRight: '40px',
-            marginLeft: '40px',
-          }}
-        >
-          <Typography variant="h6" style={{ marginBottom: '10px' }}>
-            NFL
-          </Typography>
+        <div style={{ width: '200px', textAlign: 'left', marginRight: '40px', marginLeft: '40px' }}>
+          <Typography variant="h6" style={{ marginBottom: '10px' }}>NFL</Typography>
 
           {Object.entries(
             teamNames.reduce((acc, teamObj) => {
-              const division = nflTeams.find(
-                (nflTeam) => nflTeam.id === teamObj.id
-              )?.division;
+              const division = nflTeams.find((nflTeam) => nflTeam.id === teamObj.id)?.division;
               if (!acc[division]) acc[division] = [];
               acc[division].push(teamObj);
               return acc;
@@ -160,7 +143,30 @@ export default function NFLPage() {
           ))}
         </div>
       ) : null}
-    
+      {/* Team Table Display */}
+      <div style={{ flexGrow: 1 }}>
+        {teamLoading ? (
+          <CircularProgress />
+        ) : (
+          openTable && (
+            <Box
+              style={{
+                marginTop: '40px',
+                marginBottom: '40px',
+                marginLeft: '20px',
+                marginRight: '20px',
+                width: 'auto',
+                overflowX: 'auto',
+                borderRadius: '6px',
+                border: 'solid 1px',
+                boxSizing: 'border-box',
+              }}
+            >
+              <NFLTeamTable teamStats={teamStats} year={year} />
+            </Box>
+          )
+        )}
+      </div>
     </div>
   );
 }

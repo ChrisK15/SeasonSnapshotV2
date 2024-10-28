@@ -4,7 +4,7 @@ import axios from 'axios';
 import { nflTeams } from '../data/nflTeams';
 import { yearList } from '../data/years';
 
-const useNFLTeamsData = () => {
+const useNFLTeamNamesData = () => {
   const [teamNames, setTeamNames] = useState([]);
   const [yearNumbers, setYearNumbers] = useState([]);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ const useNFLTeamsData = () => {
       try {
         const response = await axios.get('/api/proxy/nflTeams/');
         const filteredTeams = response.data.filter((team) =>
-          nflTeams.some((NFLTeam) => NFLTeam.ID === team.ID)
+          nflTeams.some((NFLTeam) => NFLTeam.id === team.id)
         );
         setTeamNames(filteredTeams);
       } catch (error) {
@@ -34,4 +34,4 @@ const useNFLTeamsData = () => {
   return { teamNames, yearNumbers, error };
 };
 
-export default useNFLTeamsData;
+export default useNFLTeamNamesData;
