@@ -41,11 +41,20 @@ export default function Home() {
           </Typography>
         </Grid>
 
-        {/* Button */}
+        {/* NBA Button */}
         <Grid item xs={12}>
           <Link href="/pages/nba_page">
             <Button variant="contained" size="large">
-              Get Started
+              Get Started with NBA
+            </Button>
+          </Link>
+        </Grid>
+
+        {/* NFL Button */}
+        <Grid item xs={12}>
+          <Link href="/pages/nfl_page">
+            <Button variant="contained" size="large">
+              Get Started with NFL
             </Button>
           </Link>
         </Grid>
