@@ -27,8 +27,8 @@ const TeamTable = ({ teamStats, year }) => {
   };
 
   const generateTeamTableRows = (data) => {
-    if (!data || data === 0) {
-      return null;
+    if (!data || !data.record) {
+      return null; // Return early if data or data.record is undefined
     }
   
     return (
