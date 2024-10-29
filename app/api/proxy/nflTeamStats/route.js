@@ -18,7 +18,7 @@ export async function POST(req) {
       { headers }
     );
 
-    const nflTeamStats = nflTeamStatsResponse.data.record;
+    const nflTeamStats = nflTeamStatsResponse.data;
 
     return NextResponse.json({ nflTeamStats });
   } catch (error) {

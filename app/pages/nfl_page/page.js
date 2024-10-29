@@ -3,19 +3,17 @@
 // -------
 // Imports
 // -------
-import NFLTeamTable from '../../components/NFLTeamTable'; // Import NFL-specific TeamTable component
-import useNFLTeamData from '../../hooks/useNFLTeamData';  // Import NFL-specific data hook
-import React, { useEffect, useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import useNFLTeamData from '../../hooks/useNFLTeamData';
 import useNFLTeamNamesData from '../../hooks/useNFLTeamNamesData';
 import { nflTeams } from '@/app/data/nflTeams';
 import {
-  Box,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   Typography,
-  CircularProgress,
   Button,
 } from '@mui/material';
 
@@ -25,12 +23,14 @@ export default function NFLPage() {
   // ---------------
   const [year, setYear] = useState('');
   const { teamNames, yearNumbers, error: teamNamesError } = useNFLTeamNamesData();
-  const [team, setTeam] = useState('');
   const [teamID, setTeamID] = useState('');
-  const [openTable, setOpenTable] = useState(false);
+  const { teamStats, loading, error } = useNFLTeamData(teamID, year);
 
-  // Custom hook to fetch NFL team stats
-  const { teamStats, loading: teamLoading, error: teamStatsError } = useNFLTeamData(teamID, year);
+  // Log the teamStats to console when it updates
+  useEffect(() => {
+    console.log("Team Stats:", teamStats);
+  }, [teamStats]);
+  
 
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;
@@ -41,13 +41,11 @@ export default function NFLPage() {
     if (!year) {
       alert('Choose a year.');
     } else {
-      setTeam(teamName);
       const selectedTeamObj = teamNames.find(
         (teamObj) => teamObj.name === teamName
       );
       if (selectedTeamObj) {
-        setTeamID(selectedTeamObj.id);
-        setOpenTable(true);
+        setTeamID(selectedTeamObj.id);;
       }
     }
   };
@@ -143,30 +141,17 @@ export default function NFLPage() {
           ))}
         </div>
       ) : null}
-      {/* Team Table Display */}
-      <div style={{ flexGrow: 1 }}>
-        {teamLoading ? (
-          <CircularProgress />
-        ) : (
-          openTable && (
-            <Box
-              style={{
-                marginTop: '40px',
-                marginBottom: '40px',
-                marginLeft: '20px',
-                marginRight: '20px',
-                width: 'auto',
-                overflowX: 'auto',
-                borderRadius: '6px',
-                border: 'solid 1px',
-                boxSizing: 'border-box',
-              }}
-            >
-              <NFLTeamTable teamStats={teamStats} year={year} />
-            </Box>
-          )
-        )}
-      </div>
+
+      {/* NFL DATA DISPLAY */}
+      {teamID && year && teamStats ? (
+        <div style={{ marginTop: '20px', textAlign: 'left', width: '80%' }}>
+          <Typography variant="h4">Team Stats</Typography>
+          <pre style={{ background: '#f5f5f5', padding: '15px', borderRadius: '8px', overflowX: 'auto' }}>
+            {JSON.stringify(teamStats, null, 2)}
+          </pre>
+        </div>
+      ) : null}
+    
     </div>
   );
 }

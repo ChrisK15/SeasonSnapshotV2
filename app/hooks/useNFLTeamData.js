@@ -15,10 +15,12 @@ const useTeamData = (teamID, year) => {
           year: year,
         });
 
-        const { teamStats } = teamStatsResponse.data;
+        console.log("Response from API:", teamStatsResponse.data);
 
-        setTeamStats([teamStats]);
-        console.log(teamStats);
+        const { nflTeamStats } = teamStatsResponse.data;
+
+        setTeamStats(nflTeamStats);
+
       } catch (error) {
         console.error('Error fetching NFL team data:', error.message);
         setError(error);
