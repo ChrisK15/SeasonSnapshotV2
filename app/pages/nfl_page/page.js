@@ -3,12 +3,13 @@
 // -------
 // Imports
 // -------
-
+import TeamTable from '../../components/NFLTeamTable';
 import React, { useState, useEffect } from 'react';
 import useNFLTeamData from '../../hooks/useNFLTeamData';
 import useNFLTeamNamesData from '../../hooks/useNFLTeamNamesData';
 import { nflTeams } from '@/app/data/nflTeams';
 import {
+  Box,
   FormControl,
   InputLabel,
   MenuItem,
@@ -146,11 +147,23 @@ export default function NFLPage() {
       {teamID && year && teamStats ? (
         <div style={{ marginTop: '20px', textAlign: 'left', width: '80%' }}>
           <Typography variant="h4">Team Stats</Typography>
-          <pre style={{ background: '#f5f5f5', padding: '15px', borderRadius: '8px', overflowX: 'auto' }}>
-            {JSON.stringify(teamStats, null, 2)}
-          </pre>
+          <Box
+            style={{
+              marginTop: '40px',
+              marginBottom: '40px',
+              marginLeft: '20px',
+              marginRight: '20px',
+              width: 'auto',
+              overflowX: 'auto',
+              borderRadius: '6px',
+              border: 'solid 1px',
+              boxSizing: 'border-box',
+            }}
+          >
+            <TeamTable teamStats={teamStats} year={year} />
+          </Box>
         </div>
-      ) : null}
+) : null}
     
     </div>
   );

@@ -8,48 +8,97 @@ import {
   TableCell,
   TableBody,
 } from '@mui/material';
-import {
-  displayedNFLTeamColumns,
-  nflTeamColumnNameMap,
-} from '../data/tableNFLTeamColumns'; // New file for NFL columns
 
-const NFLTeamTable = ({ nflTeamStats, year }) => {
+import {
+  displayedTeamColumns,
+  teamColumnNameMap,
+} from '../data/tableNFLTeamColumns';
+
+const TeamTable = ({ teamStats, year }) => {
   const generateTeamTableColumn = (data) => {
     if (!data || data.length === 0) {
       return null;
     }
-    return displayedNFLTeamColumns.map((key) => (
+    return displayedTeamColumns.map((key) => (
       <TableCell key={key} align="right">
-        {nflTeamColumnNameMap[key]}
+        {teamColumnNameMap[key]}
       </TableCell>
     ));
   };
 
   const generateTeamTableRows = (data) => {
-    if (!data || data.length === 0) {
+    if (!data || data === 0) {
       return null;
     }
-    return data.map((row, index) => (
-      <TableRow key={index}>
-        {displayedNFLTeamColumns.map((key) => (
-          <TableCell key={key} align="right">
-            {row[key]}
-          </TableCell>
-        ))}
+  
+    return (
+      <TableRow>
+        {displayedTeamColumns.map((key) => {
+          if (key === 'season') {
+            // Only display the year in the season column
+            return (
+              <TableCell key={key} align="right">
+                {year}
+              </TableCell>
+            );
+          } else if (key ==='games_played'){
+            // You should provide some fallback for other columns (for now just return an empty cell)
+            return (
+              <TableCell key={key} align="right">
+                {data.record.games_played}
+              </TableCell>
+            );
+          } else if(key ==='wins'){
+            return (
+              <TableCell key={key} align="right">
+                {'Need to integrate "Postgame Standings API'}
+              </TableCell>)
+          } else if(key ==='losses'){
+            return (
+              <TableCell key={key} align="right">
+                {'Need to integrate "Postgame Standings API'}
+              </TableCell>)
+          }else if(key === 'touchdowns'){
+            return (
+              <TableCell key={key} align="right">
+                {data.record.touchdowns.total}
+              </TableCell>)
+          }else if(key === 'rushing_yards'){
+            return (
+              <TableCell key={key} align="right">
+                {data.record.rushing.yards}
+              </TableCell>)
+          }else if(key === 'passing_yards'){
+            return (
+              <TableCell key={key} align="right">
+                {data.record.passing.yards}
+              </TableCell>)
+          }else if(key === 'penalties'){
+            return (
+              <TableCell key={key} align="right">
+                {data.record.penalties.penalties}
+              </TableCell>)
+          }else if(key === 'penalty_yards'){
+            return (
+              <TableCell key={key} align="right">
+                {data.record.penalties.yards}
+              </TableCell>)
+          }
+        })}
       </TableRow>
-    ));
+    );
   };
 
   return (
     <TableContainer component={Paper}>
-      <Table aria-label="team stats table" size="small">
+      <Table aria-label="player table" size="small">
         <TableHead>
-          <TableRow>{generateTeamTableColumn(nflTeamStats)}</TableRow>
+          <TableRow>{generateTeamTableColumn(teamStats)}</TableRow>
         </TableHead>
-        <TableBody>{generateTeamTableRows(nflTeamStats)}</TableBody>
+        <TableBody>{generateTeamTableRows(teamStats)}</TableBody>
       </Table>
     </TableContainer>
   );
 };
 
-export default NFLTeamTable;
+export default TeamTable;
