@@ -7,6 +7,7 @@ import TeamTable from '../../components/NFLTeamTable';
 import React, { useState, useEffect } from 'react';
 import useNFLTeamData from '../../hooks/useNFLTeamData';
 import useNFLTeamNamesData from '../../hooks/useNFLTeamNamesData';
+import useNFLTeamStandingsData from '../../hooks/useNFLTeamStandingsData';
 import { nflTeams } from '@/app/data/nflTeams';
 import {
   Box,
@@ -26,6 +27,7 @@ export default function NFLPage() {
   const { teamNames, yearNumbers, error: teamNamesError } = useNFLTeamNamesData();
   const [teamID, setTeamID] = useState('');
   const { teamStats, loading, error } = useNFLTeamData(teamID, year);
+  const { teamStandings, loading2, error: standingsError } = useNFLTeamStandingsData(year);
 
   // Log the teamStats to console when it updates
   useEffect(() => {
@@ -146,7 +148,6 @@ export default function NFLPage() {
       {/* NFL DATA DISPLAY */}
       {teamID && year && teamStats ? (
         <div style={{ marginTop: '20px', textAlign: 'left', width: '80%' }}>
-          <Typography variant="h4">Team Stats</Typography>
           <Box
             style={{
               marginTop: '40px',
@@ -163,8 +164,20 @@ export default function NFLPage() {
             <TeamTable teamStats={teamStats} year={year} />
           </Box>
         </div>
-) : null}
-    
+      ) : null}
+
+      {/* Raw Team Standings Display */}
+      {loading && <div>Loading standings...</div>}
+      {standingsError && <div>Error: {standingsError}</div>}
+      {teamStandings && (
+        <div style={{ marginTop: '20px', textAlign: 'left', width: '80%' }}>
+          <Typography variant="h4">Raw Team Standings Data</Typography>
+          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+            {JSON.stringify(teamStandings, null, 2)}
+          </pre>
+        </div>
+      )}
+
     </div>
   );
 }
