@@ -161,23 +161,10 @@ export default function NFLPage() {
               boxSizing: 'border-box',
             }}
           >
-            <TeamTable teamStats={teamStats} year={year} />
+            <TeamTable teamStats={teamStats} teamStandings={teamStandings} year={year} teamID={teamID}/>
           </Box>
         </div>
       ) : null}
-
-      {/* Raw Team Standings Display */}
-      {loading && <div>Loading standings...</div>}
-      {standingsError && <div>Error: {standingsError}</div>}
-      {teamStandings && (
-        <div style={{ marginTop: '20px', textAlign: 'left', width: '80%' }}>
-          <Typography variant="h4">Raw Team Standings Data</Typography>
-          <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-            {JSON.stringify(teamStandings, null, 2)}
-          </pre>
-        </div>
-      )}
-
     </div>
   );
 }
