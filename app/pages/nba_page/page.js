@@ -116,16 +116,16 @@ export default function Home() {
         {!teamID || !year ? (
           <div
             style={{
-              width: '200px',
+              width: '100%',
               textAlign: 'left',
               marginRight: '40px',
               marginLeft: '40px',
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
             }}
           >
-            <Typography variant="h6" style={{ marginBottom: '10px' }}>
-              NBA
-            </Typography>
-
             {Object.entries(
               teamNames.reduce((acc, teamObj) => {
                 const division = nbaTeams.find(
