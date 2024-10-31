@@ -91,9 +91,14 @@ export default function Home() {
 
             {/* MLB Button */}
             <Grid item>
-              <Button variant="contained" size="large" color="success">
+            <Link href="/pages/mlb_page" passHref>
+              <Button 
+                variant="contained" 
+                size="large" 
+                color="success">
                 MLB
               </Button>
+              </Link>
             </Grid>
 
             {/* NFL Button */}
