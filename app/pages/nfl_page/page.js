@@ -1,8 +1,5 @@
 'use client';
 
-// -------
-// Imports
-// -------
 import TeamTable from '../../components/NFLTeamTable';
 import React, { useState, useEffect } from 'react';
 import useNFLTeamData from '../../hooks/useNFLTeamData';
@@ -20,24 +17,14 @@ import {
 } from '@mui/material';
 
 export default function NFLPage() {
-  // ---------------
-  // State variables
-  // ---------------
   const [year, setYear] = useState('');
   const { teamNames, yearNumbers, error: teamNamesError } = useNFLTeamNamesData();
   const [teamID, setTeamID] = useState('');
   const { teamStats, loading, error } = useNFLTeamData(teamID, year);
   const { teamStandings, loading2, error: standingsError } = useNFLTeamStandingsData(year);
 
-  // Log the teamStats to console when it updates
-  useEffect(() => {
-    console.log("Team Stats:", teamStats);
-  }, [teamStats]);
-  
-
   const handleYearChange = (e) => {
-    const selectedYear = e.target.value;
-    setYear(selectedYear);
+    setYear(e.target.value);
   };
 
   const handleTeamChangeFromList = (teamName) => {
@@ -48,12 +35,11 @@ export default function NFLPage() {
         (teamObj) => teamObj.name === teamName
       );
       if (selectedTeamObj) {
-        setTeamID(selectedTeamObj.id);;
+        setTeamID(selectedTeamObj.id);
       }
     }
   };
 
-  // Handle errors
   if (teamNamesError) {
     return <div>Error loading NFL teams: {teamNamesError.message}</div>;
   }
@@ -64,7 +50,6 @@ export default function NFLPage() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '20px' }}>
-      {/* Button to return to homepage */}
       <Button
         variant="outlined"
         size="medium"
@@ -81,10 +66,8 @@ export default function NFLPage() {
         Home
       </Button>
 
-      {/* Page Title Header */}
       <Typography variant="h1">Season Snapshot</Typography>
 
-      {/* Year Drop-down Menu*/}
       {!teamID || !year ? (
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
           <FormControl sx={{ minWidth: 100 }}>
@@ -106,11 +89,9 @@ export default function NFLPage() {
         </div>
       ) : null}
 
-      {/* NFL Teams List */}
       {!teamID || !year ? (
         <div style={{ width: '200px', textAlign: 'left', marginRight: '40px', marginLeft: '40px' }}>
           <Typography variant="h6" style={{ marginBottom: '10px' }}>NFL</Typography>
-
           {Object.entries(
             teamNames.reduce((acc, teamObj) => {
               const division = nflTeams.find((nflTeam) => nflTeam.id === teamObj.id)?.division;
@@ -145,7 +126,6 @@ export default function NFLPage() {
         </div>
       ) : null}
 
-      {/* NFL DATA DISPLAY */}
       {teamID && year && teamStats ? (
         <div style={{ marginTop: '20px', textAlign: 'left', width: '80%' }}>
           <Box
