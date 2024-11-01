@@ -73,6 +73,8 @@ export default function Home() {
         <div
           style={{
             display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
             justifyContent: 'center',
             marginBottom: '20px',
           }}
@@ -93,11 +95,22 @@ export default function Home() {
               ))}
             </Select>
           </FormControl>
+
+          <div style={{ width: '100%' }}>
+            <TeamList
+              teamNames={teamNames}
+              nbaTeams={nbaTeams}
+              year={year}
+              setTeam={setTeam}
+              setTeamID={setTeamID}
+              setOpenTable={setOpenTable}
+            />
+          </div>
         </div>
       ) : null}
 
       <div style={{ display: 'flex', width: '100%' }}>
-        {!teamID || !year ? (
+        {/* {!teamID || !year ? (
           <TeamList
             teamNames={teamNames}
             nbaTeams={nbaTeams}
@@ -106,7 +119,7 @@ export default function Home() {
             setTeamID={setTeamID}
             setOpenTable={setOpenTable}
           />
-        ) : null}
+        ) : null} */}
 
         <div style={{ flexGrow: 1 }}>
           {teamLoading || playerLoading ? (
