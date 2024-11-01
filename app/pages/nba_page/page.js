@@ -110,17 +110,6 @@ export default function Home() {
       ) : null}
 
       <div style={{ display: 'flex', width: '100%' }}>
-        {/* {!teamID || !year ? (
-          <TeamList
-            teamNames={teamNames}
-            nbaTeams={nbaTeams}
-            year={year}
-            setTeam={setTeam}
-            setTeamID={setTeamID}
-            setOpenTable={setOpenTable}
-          />
-        ) : null} */}
-
         <div style={{ flexGrow: 1 }}>
           {teamLoading || playerLoading ? (
             <CircularProgress />
