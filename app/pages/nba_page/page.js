@@ -112,7 +112,9 @@ export default function Home() {
       <div style={{ display: 'flex', width: '100%' }}>
         <div style={{ flexGrow: 1 }}>
           {teamLoading || playerLoading ? (
-            <CircularProgress />
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </div>
           ) : (
             openTable && (
               <div>
