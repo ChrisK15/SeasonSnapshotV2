@@ -9,8 +9,7 @@ import {
   CircularProgress,
   Button,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 
 import TeamTable from '../../components/TeamTable';
 import PlayerTable from '../../components/PlayerTable';
