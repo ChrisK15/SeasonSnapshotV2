@@ -11,13 +11,13 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 
-import TeamTable from '../../components/TeamTable';
-import PlayerTable from '../../components/PlayerTable';
-import useTeamData from '../../hooks/useTeamData';
-import usePlayerData from '../../hooks/usePlayerData';
-import useTeamNamesData from '../../hooks/useTeamNamesData';
-import { nbaTeams } from '../../data/teams';
+import TeamTable from '@/app/components/TeamTable';
+import PlayerTable from '@/app/components/PlayerTable';
+import useTeamData from '@/app/hooks/useTeamData';
+import usePlayerData from '@/app/hooks/usePlayerData';
+import useTeamNamesData from '@/app/hooks/useTeamNamesData';
 import TeamList from '@/app/components/teamList';
+import { nbaTeams } from '@/app/data/teams';
 
 export default function Home() {
   // STATES
