@@ -43,11 +43,22 @@ export default function Home() {
 
         {/* Button */}
         <Grid item xs={12}>
-          <Link href="/pages/nba_page">
-            <Button variant="contained" size="large">
-              Get Started
-            </Button>
-          </Link>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <Link href="/pages/nba_page">
+              <Button
+                variant="contained"
+                size="large"
+                sx={{ marginBottom: '12px' }}
+              >
+                Get Started
+              </Button>
+            </Link>
+            <Link href="/pages/nhl_page">
+              <Button variant="contained" size="large">
+                NHL
+              </Button>
+            </Link>
+          </div>
         </Grid>
       </Grid>
     </div>
