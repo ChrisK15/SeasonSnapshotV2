@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 
 /*
-This GET request fetches the list of teams from the API
+This GET request fetches the list of MLB teams from the API and structures it according to the required fields.
 
-headers: needed to properly fetch from the API server
-apiKey: our secret API key to communicate with sports radar
-teamListResponse: raw JSON data from API
-teams: gets only what we need from the team list, this is not to be confused with the filter we do on the front-end
+Parameters:
+- headers: needed to properly fetch from the API server
+- apiKey: our secret API key to communicate with sports radar
+- teamListResponse: raw JSON data from API
+- teams: extracts and structures only the needed fields (id, name, market, abbreviation, division) from each team
 */
 export async function GET() {
   try {
@@ -16,7 +17,8 @@ export async function GET() {
     };
     // eslint-disable-next-line no-undef
     const apiKey = process.env.SPORTS_RADAR_API_KEY;
-    // LIST OF TEAMS
+    
+    // Fetch the list of teams
     const teamListResponse = await axios.get(
       `https://api.sportradar.com/mlb/trial/v7/en/league/teams.json?api_key=${apiKey}`,
       { headers },

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useTeamDataMLB = (teamID, year) => {
+const useMLBTeamData = (teamID, year) => {
   const [teamStats, setTeamStats] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -10,35 +10,34 @@ const useTeamDataMLB = (teamID, year) => {
     const fetchTeamData = async () => {
       setLoading(true);
       try {
-        // Fetch team-specific statistics
         const teamStatsResponse = await axios.post('/api/proxy/MLB/teamStatsMLB', {
           teamID: teamID,
           year: year,
         });
 
-        const { teamStats } = teamStatsResponse.data; // Ensure response structure matches MLB data
+        const { teamStats } = teamStatsResponse.data;
 
-        // Fetch team standings for the specific year
         const standingsResponse = await axios.post('/api/proxy/MLB/teamStandingsMLB', {
           year: year,
         });
 
-        // Assuming `standingsResponse.data` contains an array of teams with wins and losses
-        const standings = standingsResponse.data.teams.find((team) => team.id === teamID);
+        const standings = standingsResponse.data.leagues
+          .flatMap((league) =>
+            league.divisions.flatMap((division) => division.teams)
+          )
+          .find((team) => team.id === teamID);
 
         if (standings) {
-          // Calculate standings-related data for MLB
           const standingsData = {
-            games_played: standings.wins + standings.losses,
-            wins: standings.wins,
-            losses: standings.losses,
+            games_played: standings.win + standings.loss,
+            wins: standings.win,
+            losses: standings.loss,
             win_percentage: (
-              standings.wins /
-              (standings.wins + standings.losses)
+              standings.win /
+              (standings.win + standings.loss)
             ).toFixed(3),
           };
 
-          // Merge team stats with standings data
           const updatedTeamStats = {
             ...teamStats,
             ...standingsData,
@@ -49,7 +48,7 @@ const useTeamDataMLB = (teamID, year) => {
           setTeamStats([teamStats]);
         }
       } catch (error) {
-        console.error('Error fetching team data:', error.message);
+        console.error('Error fetching MLB team data:', error.message);
         setError(error);
       } finally {
         setLoading(false);
@@ -64,4 +63,4 @@ const useTeamDataMLB = (teamID, year) => {
   return { teamStats, loading, error };
 };
 
-export default useTeamDataMLB;
+export default useMLBTeamData;

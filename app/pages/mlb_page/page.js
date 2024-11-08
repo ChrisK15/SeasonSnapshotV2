@@ -1,99 +1,212 @@
 'use client';
 import {
   Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Typography,
-  Button,
   CircularProgress,
+  Button,
 } from '@mui/material';
 import React, { useState } from 'react';
 
-import { mlbTeams } from '../../data/MLB/teamsMLB'; // Import the MLB teams with divisions
+import TeamTable from '../../components/MLB/TeamTableMLB';
+import PlayerTable from '../../components/MLB/PlayerTableMLB';
+import useTeamData from '../../hooks/MLB/useTeamDataMLB';
+import usePlayerData from '../../hooks/MLB/usePlayerDataMLB';
+import useTeamNamesData from '../../hooks/MLB/useTeamNamesDataMLB';
+import { mlbTeams } from '../../data/MLB/teamsMLB';
 
-export default function MLBPage() {
+export default function Home() {
+  // STATES
+  const [team, setTeam] = useState('');
   const [teamID, setTeamID] = useState('');
-  const [year, setYear] = useState('2023'); // Default year selection
-  const [loading, setLoading] = useState(false);
-  const [teamStats, setTeamStats] = useState(null);
+  const [year, setYear] = useState('');
+  const [openTable, setOpenTable] = useState(false);
 
-  // Group teams by division for displaying in sections
-  const teamsByDivision = mlbTeams.reduce((acc, team) => {
-    if (!acc[team.division]) acc[team.division] = [];
-    acc[team.division].push(team);
-    return acc;
-  }, {});
+  const {
+    teamStats,
+    loading: teamLoading,
+    error: teamError,
+  } = useTeamData(teamID, year);
+  const {
+    playerStats,
+    loading: playerLoading,
+    error: playerError,
+  } = usePlayerData(teamID, year);
+  const { teamNames, yearNumbers, error: teamNameError } = useTeamNamesData();
 
-  const handleTeamClick = async (teamName) => {
-    setTeamID(teamName);
-    setLoading(true);
+  const handleYearChange = (e) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
+  };
 
-    // Simulate fetching team stats (replace with actual API call if needed)
-    setTimeout(() => {
-      setTeamStats({ name: teamName, year: year, stats: 'Example stats data' });
-      setLoading(false);
-    }, 1000);
+  const handleTeamChangeFromList = (teamName) => {
+    if (!year) {
+      alert('Choose a year.');
+    } else {
+      setTeam(teamName);
+      const selectedTeamObj = teamNames.find(
+        (teamObj) => teamObj.name === teamName
+      );
+      if (selectedTeamObj) {
+        setTeamID(selectedTeamObj.id);
+        setOpenTable(true);
+        console.log('Selected Team ID:', selectedTeamObj.id); // Check teamID
+        console.log('Year:', year); // Check year
+        console.log('openTable:', openTable); // Check openTable status
+      }
+    }
   };
 
   return (
-    <Box sx={{ display: 'flex', width: '100%', height: '100vh' }}>
-      {/* Sidebar for teams */}
-      <Box sx={{ width: '250px', padding: 2, backgroundColor: '#f5f5f5', overflowY: 'auto' }}>
-        <Typography variant="h6" gutterBottom>
-          MLB Teams
-        </Typography>
-        {Object.entries(teamsByDivision).map(([division, teams]) => (
-          <Box key={division} sx={{ mb: 3 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
-              {division}
-            </Typography>
-            {teams.map((team) => (
-              <Typography
-                key={team.name}
-                variant="body2"
-                onClick={() => handleTeamClick(team.name)}
-                sx={{
-                  cursor: 'pointer',
-                  color: teamID === team.name ? 'primary.main' : 'text.primary',
-                  mb: 1,
-                  '&:hover': { color: 'primary.main' },
-                }}
-              >
-                {team.name}
-              </Typography>
-            ))}
-          </Box>
-        ))}
-      </Box>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: '20px',
+      }}
+    >
+      <Button
+        variant="outlined"
+        size="medium"
+        color="primary"
+        onClick={() => (window.location.href = '/')}
+        style={{
+          color: 'black',
+          borderColor: 'black',
+          position: 'absolute',
+          top: '20px',
+          left: '20px',
+        }}
+      >
+        Home
+      </Button>
+      <Typography variant="h1">Season Snapshot</Typography>
 
-      {/* Main content area */}
-      <Box sx={{ flex: 1, padding: 4 }}>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => (window.location.href = '/')}
-          sx={{ mb: 3 }}
+      {!teamID || !year ? (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '20px',
+          }}
         >
-          Home
-        </Button>
+          <FormControl sx={{ minWidth: 100 }}>
+            <InputLabel id="year-select-label">Year</InputLabel>
+            <Select
+              labelId="year-select-label"
+              id="year-select"
+              value={year}
+              onChange={handleYearChange}
+              label="Years"
+            >
+              {yearNumbers.map((yearObj) => (
+                <MenuItem key={yearObj} value={yearObj}>
+                  {yearObj}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+      ) : null}
 
-        <Typography variant="h4" gutterBottom>
-          MLB Season Snapshot
-        </Typography>
+      <div style={{ display: 'flex', width: '100%' }}>
+        {!teamID || !year ? (
+          <div
+            style={{
+              width: '200px',
+              textAlign: 'left',
+              marginRight: '40px',
+              marginLeft: '40px',
+            }}
+          >
+            <Typography variant="h6" style={{ marginBottom: '10px' }}>
+              MLB
+            </Typography>
 
-        <Typography variant="h6" gutterBottom>
-          Year: {year}
-        </Typography>
+            {Object.entries(
+              mlbTeams.reduce((acc, teamObj) => {
+                const division = teamObj.division;
 
-        {loading ? (
-          <CircularProgress />
-        ) : teamStats ? (
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h5">{teamStats.name} - {teamStats.year}</Typography>
-            <Typography variant="body1">Stats: {teamStats.stats}</Typography>
-          </Box>
-        ) : (
-          <Typography variant="body1">Select a team from the sidebar to view stats.</Typography>
-        )}
-      </Box>
-    </Box>
+                if (!division) return acc; // Skip teams without a division
+                
+                if (!acc[division]) acc[division] = [];
+                acc[division].push(teamObj);
+                return acc;
+              }, {})
+            ).map(([division, teams]) => (
+              <div key={division} style={{ marginBottom: '20px' }}>
+                <Typography variant="h6">{division}</Typography>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {teams.map((teamObj) => (
+                    <Typography
+                      key={teamObj.id}
+                      variant="body1"
+                      component="a"
+                      href="#"
+                      onClick={() => handleTeamChangeFromList(teamObj.name)}
+                      style={{
+                        margin: '5px 0',
+                        cursor: 'pointer',
+                        color: '#1e88e5',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      {teamObj.name}
+                    </Typography>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        <div style={{ flexGrow: 1 }}>
+          {teamLoading || playerLoading ? (
+            <CircularProgress />
+          ) : (
+            openTable && teamStats && (
+              <div>
+                <Box
+                  style={{
+                    marginTop: '40px',
+                    marginBottom: '40px',
+                    marginLeft: '20px',
+                    marginRight: '20px',
+                    width: 'auto',
+                    overflowX: 'auto',
+                    borderRadius: '6px',
+                    border: 'solid 1px',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  <TeamTable teamStats={teamStats} year={year} />
+                </Box>
+                {playerStats && (
+                  <Box
+                    style={{
+                      marginTop: '40px',
+                      marginBottom: '40px',
+                      marginLeft: '20px',
+                      marginRight: '20px',
+                      width: 'auto',
+                      overflowX: 'auto',
+                      borderRadius: '6px',
+                      border: 'solid 1px',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    <PlayerTable playerStats={playerStats} />
+                  </Box>
+                )}
+              </div>
+            )
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

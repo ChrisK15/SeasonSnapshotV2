@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { mlbTeams } from '../data/MLB/teamsMLB'; // Import MLB teams
-import { yearList } from '../data/years'; // Assuming `yearList` is shared or MLB-specific
+import { mlbTeams } from '../../data/MLB/teamsMLB'; // Import MLB teams
+import { yearList } from '../../data/years'; // Assuming `yearList` is shared or MLB-specific
 
 const useTeamNamesDataMLB = () => {
   const [teamNames, setTeamNames] = useState([]);

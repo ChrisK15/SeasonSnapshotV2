@@ -19,6 +19,7 @@ import usePlayerData from '../../hooks/usePlayerData';
 import useTeamNamesData from '../../hooks/useTeamNamesData';
 import { nbaTeams } from '../../data/teams';
 
+// new color here
 export default function Home() {
   // STATES
   const [team, setTeam] = useState('');

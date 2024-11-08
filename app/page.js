@@ -77,13 +77,7 @@ export default function Home() {
                   variant="contained" 
                   size="large" 
                   color="error"
-                  startIcon={
-                    <img
-                      src='/images/NBA_logo.jpg'
-                      alt= "NBA Logo"
-                      style={{width: '24px', height: '24px'}}
-                      />
-                  }>
+                  >
                   NBA
                 </Button>
               </Link>
