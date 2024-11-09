@@ -21,20 +21,20 @@ const useTeamData = (teamID, year) => {
           year: year,
         });
 
-        const standings = standingsResponse.data.leagues
-          .flatMap((league) =>
-            league.divisions.flatMap((division) => division.teams)
+        const standings = standingsResponse.data.conferences
+          .flatMap((conference) =>
+            conference.divisions.flatMap((division) => division.teams)
           )
           .find((team) => team.id === teamID);
 
         if (standings) {
           const standingsData = {
-            games_played: standings.win + standings.loss,
-            wins: standings.win,
-            losses: standings.loss,
+            games_played: standings.wins + standings.losses,
+            wins: standings.wins,
+            losses: standings.losses,
             win_percentage: (
-              standings.win /
-              (standings.win + standings.loss)
+              standings.wins /
+              (standings.wins + standings.losses)
             ).toFixed(3),
           };
 

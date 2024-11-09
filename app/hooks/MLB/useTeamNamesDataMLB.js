@@ -12,10 +12,10 @@ const useTeamNamesDataMLB = () => {
   useEffect(() => {
     const fetchTeamNames = async () => {
       try {
-        const response = await axios.get('/api/proxy/MLB/teamNamesMLB'); // MLB-specific endpoint
+        const response = await axios.get('/api/proxy/MLB/teamNamesMLB/'); // MLB-specific endpoint
 
         // Filter response data to include only MLB teams, matching by name
-        const filteredTeams = response.data.teams.filter((team) =>
+        const filteredTeams = response.data.filter((team) =>
           mlbTeams.some((mlbTeam) => mlbTeam.name === team.market)
         );
 

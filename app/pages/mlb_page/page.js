@@ -9,15 +9,17 @@ import {
   CircularProgress,
   Button,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-import TeamTable from '../../components/MLB/TeamTableMLB';
-import PlayerTable from '../../components/MLB/PlayerTableMLB';
-import useTeamData from '../../hooks/MLB/useTeamDataMLB';
-import usePlayerData from '../../hooks/MLB/usePlayerDataMLB';
-import useTeamNamesData from '../../hooks/MLB/useTeamNamesDataMLB';
+import TeamTableMLB from '../../components/MLB/TeamTableMLB';
+import PlayerTableMLB from '../../components/MLB/PlayerTableMLB';
+import useTeamDataMLB from '../../hooks/MLB/useTeamDataMLB';
+import usePlayerDataMLB from '../../hooks/MLB/usePlayerDataMLB';
+import useTeamNamesDataMLB from '../../hooks/MLB/useTeamNamesDataMLB';
 import { mlbTeams } from '../../data/MLB/teamsMLB';
 
+// new color here
 export default function Home() {
   // STATES
   const [team, setTeam] = useState('');
@@ -29,13 +31,13 @@ export default function Home() {
     teamStats,
     loading: teamLoading,
     error: teamError,
-  } = useTeamData(teamID, year);
+  } = useTeamDataMLB(teamID, year);
   const {
     playerStats,
     loading: playerLoading,
     error: playerError,
-  } = usePlayerData(teamID, year);
-  const { teamNames, yearNumbers, error: teamNameError } = useTeamNamesData();
+  } = usePlayerDataMLB(teamID, year);
+  const { teamNames, yearNumbers, error: teamNameError } = useTeamNamesDataMLB();
 
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;
@@ -53,9 +55,6 @@ export default function Home() {
       if (selectedTeamObj) {
         setTeamID(selectedTeamObj.id);
         setOpenTable(true);
-        console.log('Selected Team ID:', selectedTeamObj.id); // Check teamID
-        console.log('Year:', year); // Check year
-        console.log('openTable:', openTable); // Check openTable status
       }
     }
   };
@@ -128,11 +127,10 @@ export default function Home() {
             </Typography>
 
             {Object.entries(
-              mlbTeams.reduce((acc, teamObj) => {
-                const division = teamObj.division;
-
-                if (!division) return acc; // Skip teams without a division
-                
+              teamNames.reduce((acc, teamObj) => {
+                const division = mlbTeams.find(
+                  (mlbTeam) => mlbTeam.name === teamObj.market
+                )?.division;
                 if (!acc[division]) acc[division] = [];
                 acc[division].push(teamObj);
                 return acc;
@@ -155,7 +153,7 @@ export default function Home() {
                         textDecoration: 'none',
                       }}
                     >
-                      {teamObj.name}
+                      {teamObj.market} {teamObj.name}
                     </Typography>
                   ))}
                 </div>
@@ -168,7 +166,7 @@ export default function Home() {
           {teamLoading || playerLoading ? (
             <CircularProgress />
           ) : (
-            openTable && teamStats && (
+            openTable && (
               <div>
                 <Box
                   style={{
@@ -183,25 +181,23 @@ export default function Home() {
                     boxSizing: 'border-box',
                   }}
                 >
-                  <TeamTable teamStats={teamStats} year={year} />
+                  <TeamTableMLB teamStats={teamStats} year={year} />
                 </Box>
-                {playerStats && (
-                  <Box
-                    style={{
-                      marginTop: '40px',
-                      marginBottom: '40px',
-                      marginLeft: '20px',
-                      marginRight: '20px',
-                      width: 'auto',
-                      overflowX: 'auto',
-                      borderRadius: '6px',
-                      border: 'solid 1px',
-                      boxSizing: 'border-box',
-                    }}
-                  >
-                    <PlayerTable playerStats={playerStats} />
-                  </Box>
-                )}
+                <Box
+                  style={{
+                    marginTop: '40px',
+                    marginBottom: '40px',
+                    marginLeft: '20px',
+                    marginRight: '20px',
+                    width: 'auto',
+                    overflowX: 'auto',
+                    borderRadius: '6px',
+                    border: 'solid 1px',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  <PlayerTableMLB playerStats={playerStats} />
+                </Box>
               </div>
             )
           )}
