@@ -17,14 +17,22 @@ const useMLBTeamData = (teamID, year) => {
 
         const { teamStats } = teamStatsResponse.data;
 
+        // Fetch team standings for additional fields
         const standingsResponse = await axios.post('/api/proxy/MLB/teamStandingsMLB', {
           year: year,
         });
 
-        const standings = standingsResponse.data.leagues
-          .flatMap((league) =>
-            league.divisions.flatMap((division) => division.teams)
-          )
+        console.log("standingsResponse.data:", standingsResponse.data); // Log to inspect structure
+
+        // Check if league -> season -> leagues array exists in the response
+        const leagues = standingsResponse.data?.league?.season?.leagues;
+        if (!leagues) {
+          throw new Error("Leagues data is missing in standings response");
+        }
+
+        // Access the teams using flatMap if leagues exist
+        const standings = leagues
+          .flatMap((league) => league.divisions.flatMap((division) => division.teams))
           .find((team) => team.id === teamID);
 
         if (standings) {
@@ -33,8 +41,7 @@ const useMLBTeamData = (teamID, year) => {
             wins: standings.win,
             losses: standings.loss,
             win_percentage: (
-              standings.win /
-              (standings.win + standings.loss)
+              standings.win / (standings.win + standings.loss)
             ).toFixed(3),
           };
 

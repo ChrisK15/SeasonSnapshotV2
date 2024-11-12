@@ -1,38 +1,72 @@
 // TeamTableMLB.js
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {
+  Table,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TableCell,
+  TableBody,
+} from '@mui/material';
+import {
+  displayedTeamColumns,
+  teamColumnNameMap,
+} from '../../data/MLB/tableTeamColumnsMLB';
 
-const TeamTableMLB = ({ teamStats, year }) => {
-  if (!teamStats || teamStats.length === 0) {
-    return <div>No stats available for this team.</div>;
-  }
+const TeamTable = ({ teamStats, year }) => {
+  // Generate table columns based on displayedTeamColumns
+  const generateTeamTableColumn = () => {
+    return displayedTeamColumns.map((key) => (
+      <TableCell key={key} align="right">
+        {teamColumnNameMap[key]}
+      </TableCell>
+    ));
+  };
+
+  // Generate table rows based on displayedTeamColumns and teamStats data
+  const generateTeamTableRows = () => {
+    return teamStats.map((row, index) => (
+      <TableRow key={index}>
+        {displayedTeamColumns.map((key) => {
+          if (key === 'season') {
+            // Format season as "year-year+1"
+            const seasonYear = `${year}-${parseInt(year) + 1}`;
+            return (
+              <TableCell key={key} align="right">
+                {seasonYear}
+              </TableCell>
+            );
+          } else if (row[key] !== undefined) {
+            // Display the data directly if available
+            return (
+              <TableCell key={key} align="right">
+                {row[key]}
+              </TableCell>
+            );
+          } else {
+            // Handle missing or undefined data
+            return (
+              <TableCell key={key} align="right">
+                N/A
+              </TableCell>
+            );
+          }
+        })}
+      </TableRow>
+    ));
+  };
 
   return (
     <TableContainer component={Paper}>
-      <Table>
+      <Table aria-label="team table" size="small">
         <TableHead>
-          <TableRow>
-            <TableCell>Year</TableCell>
-            <TableCell>Games Played</TableCell>
-            <TableCell>Wins</TableCell>
-            <TableCell>Losses</TableCell>
-            <TableCell>Win Percentage</TableCell>
-          </TableRow>
+          <TableRow>{generateTeamTableColumn()}</TableRow>
         </TableHead>
-        <TableBody>
-          {teamStats.map((stat, index) => (
-            <TableRow key={index}>
-              <TableCell>{year}</TableCell>
-              <TableCell>{stat.games_played}</TableCell>
-              <TableCell>{stat.wins}</TableCell>
-              <TableCell>{stat.losses}</TableCell>
-              <TableCell>{stat.win_percentage}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+        <TableBody>{generateTeamTableRows()}</TableBody>
       </Table>
     </TableContainer>
   );
 };
 
-export default TeamTableMLB;
+export default TeamTable;

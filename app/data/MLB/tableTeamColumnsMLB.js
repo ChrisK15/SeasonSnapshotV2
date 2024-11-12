@@ -4,8 +4,6 @@ export const displayedTeamColumns = [
   'wins',
   'losses',
   'win_percentage', // custom
-  'runs_scored',
-  'hits',
   'home_runs',
   'runs_batted_in', // custom
   'stolen_bases',
@@ -27,8 +25,6 @@ export const teamColumnNameMap = {
   wins: 'W',
   losses: 'L',
   win_percentage: 'WIN%',
-  runs_scored: 'R',
-  hits: 'H',
   home_runs: 'HR',
   runs_batted_in: 'RBI',
   stolen_bases: 'SB',
