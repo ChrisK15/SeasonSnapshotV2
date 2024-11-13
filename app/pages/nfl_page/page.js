@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import useNFLTeamData from '../../hooks/useNFLTeamData';
 import useNFLTeamNamesData from '../../hooks/useNFLTeamNamesData';
 import useNFLTeamStandingsData from '../../hooks/useNFLTeamStandingsData';
+import useNFLPlayerData from '../../hooks/useNFLPlayerData';
 import { nflTeams } from '@/app/data/nflTeams';
 import {
   Box,
@@ -22,6 +23,7 @@ export default function NFLPage() {
   const [teamID, setTeamID] = useState('');
   const { teamStats, loading, error } = useNFLTeamData(teamID, year);
   const { teamStandings, loading2, error: standingsError } = useNFLTeamStandingsData(year);
+  const { playerStats, loading: playerloading, error: playerError} = useNFLPlayerData(teamID, year)
 
   const handleYearChange = (e) => {
     setYear(e.target.value);
