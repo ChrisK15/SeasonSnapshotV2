@@ -1,6 +1,7 @@
 'use client';
 
 import TeamTable from '../../components/NFLTeamTable';
+import NFLPlayerTable from '@/app/components/NFLPlayerTable';
 import React, { useState, useEffect } from 'react';
 import useNFLTeamData from '../../hooks/useNFLTeamData';
 import useNFLTeamNamesData from '../../hooks/useNFLTeamNamesData';
@@ -144,6 +145,22 @@ export default function NFLPage() {
             }}
           >
             <TeamTable teamStats={teamStats} teamStandings={teamStandings} year={year} teamID={teamID}/>
+          </Box>
+
+          <Box
+              tyle={{
+              marginTop: '40px',
+              marginBottom: '40px',
+              marginLeft: '20px',
+              marginRight: '20px',
+              width: 'auto',
+              overflowX: 'auto',
+              borderRadius: '6px',
+              border: 'solid 1px',
+              boxSizing: 'border-box',
+            }}
+          >
+            <NFLPlayerTable playerStats={playerStats} />
           </Box>
         </div>
       ) : null}
