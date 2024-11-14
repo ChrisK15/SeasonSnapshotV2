@@ -1,10 +1,14 @@
 export const displayedPlayerColumns = [
     'name',
-    'games_played'
+    'position',
+    'games_played',
+    'games_started',
   ];
   
   export const playerColumnNameMap = {
     name: 'Players',
-    games_played: 'GP'
+    position: 'Position',
+    games_played: 'GP',
+    games_started: 'GS',
   };
   
