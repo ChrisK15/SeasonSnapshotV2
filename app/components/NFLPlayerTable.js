@@ -32,9 +32,16 @@ const PlayerTable = ({ playerStats }) => {
     return data.map((row, index) => (
       <TableRow key={index}>
         {displayedPlayerColumns.map((key) => {
+          let value;
+          // Check if the key is 'tackles' and access nested value accordingly
+          if (key === 'tackles') {
+            value = row.defense?.tackles || 0; // Use 0 if undefined
+          } else {
+            value = row[key];
+          }
           return (
             <TableCell key={key} align="right">
-              {row[key]}
+              {value}
             </TableCell>
           );
         })}
