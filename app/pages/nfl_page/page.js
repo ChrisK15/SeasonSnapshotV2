@@ -52,7 +52,14 @@ export default function NFLPage() {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '20px' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: '20px',
+      }}
+    >
       <Button
         variant="outlined"
         size="medium"
@@ -68,11 +75,17 @@ export default function NFLPage() {
       >
         Home
       </Button>
-
+  
       <Typography variant="h1">Season Snapshot</Typography>
-
+  
       {!teamID || !year ? (
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '20px',
+          }}
+        >
           <FormControl sx={{ minWidth: 100 }}>
             <InputLabel id="year-select-label">Year</InputLabel>
             <Select
@@ -91,44 +104,83 @@ export default function NFLPage() {
           </FormControl>
         </div>
       ) : null}
-
+  
       {!teamID || !year ? (
-        <div style={{ width: '200px', textAlign: 'left', marginRight: '40px', marginLeft: '40px' }}>
-          <Typography variant="h6" style={{ marginBottom: '10px' }}>NFL</Typography>
-          {Object.entries(
-            teamNames.reduce((acc, teamObj) => {
-              const division = nflTeams.find((nflTeam) => nflTeam.id === teamObj.id)?.division;
-              if (!acc[division]) acc[division] = [];
-              acc[division].push(teamObj);
-              return acc;
-            }, {})
-          ).map(([division, teams]) => (
-            <div key={division} style={{ marginBottom: '20px' }}>
-              <Typography variant="h6">{division}</Typography>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {teams.map((teamObj) => (
-                  <Typography
-                    key={teamObj.id}
-                    variant="body1"
-                    component="a"
-                    href="#"
-                    onClick={() => handleTeamChangeFromList(teamObj.name)}
-                    style={{
-                      margin: '5px 0',
-                      cursor: 'pointer',
-                      color: '#1e88e5',
-                      textDecoration: 'none',
-                    }}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            margin: '0 40px',
+            width: '100%',
+          }}
+        >
+          <Typography variant="h6" style={{ marginBottom: '10px', textAlign: 'center' }}>
+            NFL
+          </Typography>
+          {(() => {
+            // Group the divisions
+            const divisionsWithTeams = Object.entries(
+              teamNames.reduce((acc, teamObj) => {
+                const division = nflTeams.find(
+                  (nflTeam) => nflTeam.id === teamObj.id
+                )?.division;
+                if (!acc[division]) acc[division] = [];
+                acc[division].push(teamObj);
+                return acc;
+              }, {})
+            );
+  
+            // Split divisions into rows of four
+            const divisionsPerRow = 4;
+            const divisionRows = [];
+            for (let i = 0; i < divisionsWithTeams.length; i += divisionsPerRow) {
+              divisionRows.push(divisionsWithTeams.slice(i, i + divisionsPerRow));
+            }
+  
+            return divisionRows.map((divisionRow, rowIndex) => (
+              <div
+                key={rowIndex}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginBottom: '20px',
+                  width: '100%',
+                }}
+              >
+                {divisionRow.map(([division, teams]) => (
+                  <div
+                    key={division}
+                    style={{ margin: '0 20px', textAlign: 'center' }}
                   >
-                    {teamObj.market} {teamObj.name}
-                  </Typography>
+                    <Typography variant="h6">{division}</Typography>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      {teams.map((teamObj) => (
+                        <Typography
+                          key={teamObj.id}
+                          variant="body1"
+                          component="a"
+                          href="#"
+                          onClick={() => handleTeamChangeFromList(teamObj.name)}
+                          style={{
+                            margin: '5px 0',
+                            cursor: 'pointer',
+                            color: '#1e88e5',
+                            textDecoration: 'none',
+                          }}
+                        >
+                          {teamObj.market} {teamObj.name}
+                        </Typography>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
-            </div>
-          ))}
+            ));
+          })()}
         </div>
       ) : null}
-
+  
       {teamID && year && teamStats ? (
         <div style={{ marginTop: '20px', textAlign: 'left', width: '80%' }}>
           <Box
@@ -144,11 +196,16 @@ export default function NFLPage() {
               boxSizing: 'border-box',
             }}
           >
-            <TeamTable teamStats={teamStats} teamStandings={teamStandings} year={year} teamID={teamID}/>
+            <TeamTable
+              teamStats={teamStats}
+              teamStandings={teamStandings}
+              year={year}
+              teamID={teamID}
+            />
           </Box>
-
+  
           <Box
-              tyle={{
+            style={{
               marginTop: '40px',
               marginBottom: '40px',
               marginLeft: '20px',
@@ -166,4 +223,5 @@ export default function NFLPage() {
       ) : null}
     </div>
   );
+  
 }

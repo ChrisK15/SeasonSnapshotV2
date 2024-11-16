@@ -33,12 +33,33 @@ const PlayerTable = ({ playerStats }) => {
       <TableRow key={index}>
         {displayedPlayerColumns.map((key) => {
           let value;
-          // Check if the key is 'tackles' and access nested value accordingly
+          let receiving_yards;
+          let rushing_yards;
+          let rushing_tds;
+          let receiving_tds;
           if (key === 'tackles') {
-            value = row.defense?.tackles || 0; // Use 0 if undefined
-          } else {
+            value = row.defense?.tackles || 0;
+        } else if (key === 'assists') {
+            value = row.defense?.assists || 0;
+        }else if (key === 'sacks') {
+          value = row.defense?.sacks || 0;
+        }else if (key === 'receptions') {
+          value = row.receiving?.receptions || 0; 
+        }else if (key === 'yards') {
+          receiving_yards = row.receiving?.yards || 0;
+          rushing_yards = row.rushing?.yards || 0;
+          value = receiving_yards + rushing_yards; 
+        }else if (key === 'attempts') {
+          value = row.passing?.attempts || 0; 
+        }else if (key === 'completions') {
+          value = row.passing?.completions || 0; 
+        }else if (key === 'touchdowns') {
+          receiving_tds = row.receiving?.touchdowns || 0;
+          rushing_tds = row.rushing?.touchdowns || 0;
+          value = receiving_tds + rushing_tds;
+        }else {
             value = row[key];
-          }
+        }
           return (
             <TableCell key={key} align="right">
               {value}

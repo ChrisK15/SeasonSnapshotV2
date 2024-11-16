@@ -3,7 +3,14 @@ export const displayedPlayerColumns = [
     'position',
     'games_played',
     'games_started',
-    'tackles'
+    'tackles',
+    'assists',
+    'sacks',
+    'receptions',
+    'yards',
+    'attempts',
+    'completed',
+    'touchdowns'
   ];
   
   export const playerColumnNameMap = {
@@ -11,6 +18,13 @@ export const displayedPlayerColumns = [
     position: 'Position',
     games_played: 'GP',
     games_started: 'GS',
-    tackles: 'TACK'
+    tackles: 'TACK',
+    assists: 'ASS',
+    sacks: 'SAC',
+    receptions: 'REC',
+    yards: 'YAR',
+    attempts: 'ATMPT',
+    completions: 'COMPL',
+    touchdowns: 'TD'
   };
   
