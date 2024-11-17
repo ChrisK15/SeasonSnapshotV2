@@ -38,23 +38,28 @@ const NFLTeamList = ({ teamNames, handleTeamChangeFromList }) => {
           style={{ margin: '0 20px', textAlign: 'center' }}
         >
           <Typography variant="h6">{division}</Typography>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             {teams.map((teamObj) => (
-              <Typography
-                key={teamObj.id}
-                variant="body1"
-                component="a"
-                href="#"
-                onClick={() => handleTeamChangeFromList(teamObj.name)}
-                style={{
-                  margin: '5px 0',
-                  cursor: 'pointer',
-                  color: '#1e88e5',
-                  textDecoration: 'none',
-                }}
-              >
-                {teamObj.market} {teamObj.name}
-              </Typography>
+              <div key={teamObj.id} style={{ display: 'flex', alignItems: 'center', margin: '5px 0' }}>
+                <img
+                  src={`/images/nfl_logos/${teamObj.market.replace(/\s+/g, '-')}-${teamObj.name.replace(/\s+/g, '-')}-01.svg`}
+                  alt={`${teamObj.name} Logo`}
+                  style={{ width: '30px', height: '30px', marginRight: '10px' }}
+                />
+                <Typography
+                  variant="body1"
+                  component="a"
+                  href="#"
+                  onClick={() => handleTeamChangeFromList(teamObj.name)}
+                  style={{
+                    cursor: 'pointer',
+                    color: '#1e88e5',
+                    textDecoration: 'none',
+                  }}
+                >
+                  {teamObj.market} {teamObj.name}
+                </Typography>
+              </div>
             ))}
           </div>
         </div>
