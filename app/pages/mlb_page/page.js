@@ -37,6 +37,7 @@ export default function Home() {
     loading: playerLoading,
     error: playerError,
   } = usePlayerDataMLB(teamID, year);
+  
   const { teamNames, yearNumbers, error: teamNameError } = useTeamNamesDataMLB();
 
   const handleYearChange = (e) => {

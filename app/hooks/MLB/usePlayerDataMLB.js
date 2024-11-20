@@ -14,8 +14,8 @@ const usePlayerDataMLB = (teamID, year) => {
           teamID: teamID,
           year: year,
         });
-        const { players } = response.data; // Ensure the response structure matches MLB data
-        setPlayerStats(players);
+        const { playerStats } = response.data; // Ensure the response structure matches MLB data
+        setPlayerStats(playerStats);
       } catch (error) {
         console.error('Error fetching player stats:', error.message);
         setError(error);
