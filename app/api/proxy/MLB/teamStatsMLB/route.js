@@ -40,7 +40,7 @@ export async function POST(req) {
       id: player.id,
       full_name: player.full_name,
       position: player.primary_position,
-      games_played: player.statistics.hitting?.overall?.ap || 0,
+      games_played: player.statistics.hitting?.overall?.games.play || 0,
       at_bats: player.statistics.hitting?.overall?.ab || 0,
       hits: player.statistics.hitting?.overall?.onbase?.h || 0,
       doubles: player.statistics.hitting?.overall?.onbase?.d || 0,
@@ -57,7 +57,9 @@ export async function POST(req) {
       strikeouts: (player.statistics.hitting?.overall?.outcome?.kswing || 0) +
                   (player.statistics.hitting?.overall?.outcome?.klook || 0),
       errors: player.statistics.fielding?.overall?.errors?.total || 0,
-    }));
+    }))
+    .filter((player) => player.games_played > 0) // Exclude players with 0 games played
+    .sort((a, b) => b.games_played - a.games_played); // Sort by games played in descending order
 
     return NextResponse.json({ teamStats, playerStats });
   } catch (error) {
