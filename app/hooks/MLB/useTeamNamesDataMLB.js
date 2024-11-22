@@ -16,7 +16,7 @@ const useTeamNamesDataMLB = () => {
 
         // Filter response data to include only MLB teams, matching by name
         const filteredTeams = response.data.filter((team) =>
-          mlbTeams.some((mlbTeam) => mlbTeam.name === team.market)
+          mlbTeams.some((mlbTeam) => mlbTeam.id === team.id)
         );
 
         setTeamNames(filteredTeams);

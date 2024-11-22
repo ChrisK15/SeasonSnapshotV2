@@ -17,6 +17,7 @@ import PlayerTableMLB from '../../components/MLB/PlayerTableMLB';
 import useTeamDataMLB from '../../hooks/MLB/useTeamDataMLB';
 import usePlayerDataMLB from '../../hooks/MLB/usePlayerDataMLB';
 import useTeamNamesDataMLB from '../../hooks/MLB/useTeamNamesDataMLB';
+import TeamList from '@/app/components/MLB/teamList';
 import { mlbTeams } from '../../data/MLB/teamsMLB';
 
 // new color here
@@ -43,21 +44,6 @@ export default function Home() {
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;
     setYear(selectedYear);
-  };
-
-  const handleTeamChangeFromList = (teamName) => {
-    if (!year) {
-      alert('Choose a year.');
-    } else {
-      setTeam(teamName);
-      const selectedTeamObj = teamNames.find(
-        (teamObj) => teamObj.name === teamName
-      );
-      if (selectedTeamObj) {
-        setTeamID(selectedTeamObj.id);
-        setOpenTable(true);
-      }
-    }
   };
 
   return (
@@ -90,8 +76,11 @@ export default function Home() {
         <div
           style={{
             display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center', // Center the content horizontally
             justifyContent: 'center',
             marginBottom: '20px',
+            width: 'fit-content', // Prevent it from stretching across the screen
           }}
         >
           <FormControl sx={{ minWidth: 100 }}>
@@ -110,59 +99,21 @@ export default function Home() {
               ))}
             </Select>
           </FormControl>
+
+          <div style={{ width: '100%' }}>
+            <TeamList
+              teamNames={teamNames}
+              mlbTeams={mlbTeams}
+              year={year}
+              setTeam={setTeam}
+              setTeamID={setTeamID}
+              setOpenTable={setOpenTable}
+            />
+          </div>
         </div>
       ) : null}
 
       <div style={{ display: 'flex', width: '100%' }}>
-        {!teamID || !year ? (
-          <div
-            style={{
-              width: '200px',
-              textAlign: 'left',
-              marginRight: '40px',
-              marginLeft: '40px',
-            }}
-          >
-            <Typography variant="h6" style={{ marginBottom: '10px' }}>
-              MLB
-            </Typography>
-
-            {Object.entries(
-              teamNames.reduce((acc, teamObj) => {
-                const division = mlbTeams.find(
-                  (mlbTeam) => mlbTeam.name === teamObj.market
-                )?.division;
-                if (!acc[division]) acc[division] = [];
-                acc[division].push(teamObj);
-                return acc;
-              }, {})
-            ).map(([division, teams]) => (
-              <div key={division} style={{ marginBottom: '20px' }}>
-                <Typography variant="h6">{division}</Typography>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {teams.map((teamObj) => (
-                    <Typography
-                      key={teamObj.id}
-                      variant="body1"
-                      component="a"
-                      href="#"
-                      onClick={() => handleTeamChangeFromList(teamObj.name)}
-                      style={{
-                        margin: '5px 0',
-                        cursor: 'pointer',
-                        color: '#1e88e5',
-                        textDecoration: 'none',
-                      }}
-                    >
-                      {teamObj.market} {teamObj.name}
-                    </Typography>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : null}
-
         <div style={{ flexGrow: 1 }}>
           {teamLoading || playerLoading ? (
             <CircularProgress />
