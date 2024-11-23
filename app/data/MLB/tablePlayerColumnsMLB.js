@@ -15,9 +15,9 @@ export const displayedPlayerColumns = [
   'caught_stealing',
   'walks',
   'strikeouts',
-  'sacrifice_flies',
-  'grounded_into_double_play',
-  'hit_by_pitch',
+  //'sacrifice_flies',
+  //'grounded_into_double_play',
+  //'hit_by_pitch',
   'errors',
 ];
 
@@ -38,8 +38,8 @@ export const playerColumnNameMap = {
   caught_stealing: 'CS',
   walks: 'BB',
   strikeouts: 'K',
-  sacrifice_flies: 'SF',
-  grounded_into_double_play: 'GIDP',
-  hit_by_pitch: 'HBP',
+  //sacrifice_flies: 'SF',
+  //grounded_into_double_play: 'GIDP',
+  //hit_by_pitch: 'HBP',
   errors: 'E',
 };
