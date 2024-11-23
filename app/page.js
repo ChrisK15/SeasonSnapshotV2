@@ -76,7 +76,7 @@ export default function Home() {
                 <Button 
                   variant="contained" 
                   size="large" 
-                  color="error"
+                  style={{ backgroundColor: "#F57C00", color: "#FFFFFF" }}
                   >
                   NBA
                 </Button>
@@ -89,7 +89,7 @@ export default function Home() {
               <Button 
                 variant="contained" 
                 size="large" 
-                color="success">
+                style={{ backgroundColor: "#388E3C", color: "#FFFFFF" }}>
                 MLB
               </Button>
               </Link>
@@ -101,8 +101,20 @@ export default function Home() {
               <Button 
                 variant="contained" 
                 size="large" 
-                color="warning">
+                color="secondary">
                 NFL
+              </Button>
+              </Link>
+            </Grid>
+
+            {/* NHL Button */}
+            <Grid item>
+            <Link href="/pages/nhl_page" passHref>
+              <Button 
+                variant="contained" 
+                size="large" 
+                style={{ backgroundColor: "#00BFFF", color: "#FFFFFF" }}>
+                NHL
               </Button>
               </Link>
             </Grid>

@@ -9,17 +9,16 @@ import {
   CircularProgress,
   Button,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 
-import TeamTable from '../../components/TeamTable';
-import PlayerTable from '../../components/PlayerTable';
-import useTeamData from '../../hooks/useTeamData';
-import usePlayerData from '../../hooks/usePlayerData';
-import useTeamNamesData from '../../hooks/useTeamNamesData';
-import { nbaTeams } from '../../data/teams';
+import TeamTable from '@/app/components/TeamTable';
+import PlayerTable from '@/app/components/PlayerTable';
+import useTeamData from '@/app/hooks/useTeamData';
+import usePlayerData from '@/app/hooks/usePlayerData';
+import useTeamNamesData from '@/app/hooks/useTeamNamesData';
+import TeamList from '@/app/components/teamList';
+import { nbaTeams } from '@/app/data/teams';
 
-// new color here
 export default function Home() {
   // STATES
   const [team, setTeam] = useState('');
@@ -42,21 +41,6 @@ export default function Home() {
   const handleYearChange = (e) => {
     const selectedYear = e.target.value;
     setYear(selectedYear);
-  };
-
-  const handleTeamChangeFromList = (teamName) => {
-    if (!year) {
-      alert('Choose a year.');
-    } else {
-      setTeam(teamName);
-      const selectedTeamObj = teamNames.find(
-        (teamObj) => teamObj.name === teamName
-      );
-      if (selectedTeamObj) {
-        setTeamID(selectedTeamObj.id);
-        setOpenTable(true);
-      }
-    }
   };
 
   return (
@@ -89,6 +73,8 @@ export default function Home() {
         <div
           style={{
             display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
             justifyContent: 'center',
             marginBottom: '20px',
           }}
@@ -109,62 +95,26 @@ export default function Home() {
               ))}
             </Select>
           </FormControl>
+
+          <div style={{ width: '100%' }}>
+            <TeamList
+              teamNames={teamNames}
+              nbaTeams={nbaTeams}
+              year={year}
+              setTeam={setTeam}
+              setTeamID={setTeamID}
+              setOpenTable={setOpenTable}
+            />
+          </div>
         </div>
       ) : null}
 
       <div style={{ display: 'flex', width: '100%' }}>
-        {!teamID || !year ? (
-          <div
-            style={{
-              width: '200px',
-              textAlign: 'left',
-              marginRight: '40px',
-              marginLeft: '40px',
-            }}
-          >
-            <Typography variant="h6" style={{ marginBottom: '10px' }}>
-              NBA
-            </Typography>
-
-            {Object.entries(
-              teamNames.reduce((acc, teamObj) => {
-                const division = nbaTeams.find(
-                  (nbaTeam) => nbaTeam.name === teamObj.market
-                )?.division;
-                if (!acc[division]) acc[division] = [];
-                acc[division].push(teamObj);
-                return acc;
-              }, {})
-            ).map(([division, teams]) => (
-              <div key={division} style={{ marginBottom: '20px' }}>
-                <Typography variant="h6">{division}</Typography>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {teams.map((teamObj) => (
-                    <Typography
-                      key={teamObj.id}
-                      variant="body1"
-                      component="a"
-                      href="#"
-                      onClick={() => handleTeamChangeFromList(teamObj.name)}
-                      style={{
-                        margin: '5px 0',
-                        cursor: 'pointer',
-                        color: '#1e88e5',
-                        textDecoration: 'none',
-                      }}
-                    >
-                      {teamObj.market} {teamObj.name}
-                    </Typography>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : null}
-
         <div style={{ flexGrow: 1 }}>
           {teamLoading || playerLoading ? (
-            <CircularProgress />
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </div>
           ) : (
             openTable && (
               <div>
