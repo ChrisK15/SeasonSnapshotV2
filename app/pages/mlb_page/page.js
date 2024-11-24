@@ -20,7 +20,6 @@ import useTeamNamesDataMLB from '../../hooks/MLB/useTeamNamesDataMLB';
 import TeamList from '@/app/components/MLB/teamList';
 import { mlbTeams } from '../../data/MLB/teamsMLB';
 
-// new color here
 export default function Home() {
   // STATES
   const [team, setTeam] = useState('');
@@ -38,7 +37,7 @@ export default function Home() {
     loading: playerLoading,
     error: playerError,
   } = usePlayerDataMLB(teamID, year);
-  
+
   const { teamNames, yearNumbers, error: teamNameError } = useTeamNamesDataMLB();
 
   const handleYearChange = (e) => {
@@ -113,47 +112,51 @@ export default function Home() {
         </div>
       ) : null}
 
-      <div style={{ display: 'flex', width: '100%' }}>
-        <div style={{ flexGrow: 1 }}>
-          {teamLoading || playerLoading ? (
-            <CircularProgress />
-          ) : (
-            openTable && (
-              <div>
-                <Box
-                  style={{
-                    marginTop: '40px',
-                    marginBottom: '40px',
-                    marginLeft: '20px',
-                    marginRight: '20px',
-                    width: 'auto',
-                    overflowX: 'auto',
-                    borderRadius: '6px',
-                    border: 'solid 1px',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <TeamTableMLB teamStats={teamStats} year={year} />
-                </Box>
-                <Box
-                  style={{
-                    marginTop: '40px',
-                    marginBottom: '40px',
-                    marginLeft: '20px',
-                    marginRight: '20px',
-                    width: 'auto',
-                    overflowX: 'auto',
-                    borderRadius: '6px',
-                    border: 'solid 1px',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <PlayerTableMLB playerStats={playerStats} />
-                </Box>
-              </div>
-            )
-          )}
-        </div>
+      {/* Use CSS Grid to layout tables */}
+      <div
+        style={{
+          display: 'grid', // Use grid layout for better responsiveness
+          gridTemplateColumns: '1fr', // Stack tables vertically by default
+          gap: '20px', // Add spacing between tables
+          width: '100%',
+          padding: '20px',
+          boxSizing: 'border-box', // Ensure padding is included in width/height calculations
+        }}
+      >
+        {teamLoading || playerLoading ? (
+          <CircularProgress />
+        ) : (
+          openTable && (
+            <>
+              {/* Team Table */}
+              <Box
+                style={{
+                  width: '100%',
+                  overflowX: 'auto', // Allow horizontal scrolling if content overflows
+                  borderRadius: '6px',
+                  border: 'solid 1px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <TeamTableMLB teamStats={teamStats} year={year} />
+              </Box>
+              
+              {/* Player Table */}
+              
+              <Box
+                style={{
+                  width: '100%',
+                  overflowX: 'auto', // Allow horizontal scrolling if content overflows
+                  borderRadius: '6px',
+                  border: 'solid 1px',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <PlayerTableMLB playerStats={playerStats} />
+              </Box>
+            </>
+          )
+        )}
       </div>
     </div>
   );
