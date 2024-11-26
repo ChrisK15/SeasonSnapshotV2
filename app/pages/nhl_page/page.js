@@ -1,11 +1,13 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import NHLTeamList from '@/app/components/NHL/NHLteamList';
 import useNHLTeamNamesData from '../../hooks/NHL/useNHLTeamNamesData';
 import TeamTable from '../../components/NHL/NHLTeamTable';
+import NHLPlayerTable from '@/app/components/NHL/NHLPlayerTable';
 import useNHLTeamData from '../../hooks/NHL/useNHLTeamData';
 import useNHLTeamStandingsData from '../../hooks/NHL/useNHLTeamStandingsData';
-
+import useNHLPlayerData from '../../hooks/NHL/useNHLPlayerData';
 import {
   Box,
   FormControl,
@@ -22,6 +24,7 @@ export default function NHLPage() {
   const [teamID, setTeamID] = useState('');
   const { teamStats, loading, error } = useNHLTeamData(teamID, year);
   const { teamStandings, loading2, error: standingsError } = useNHLTeamStandingsData(year);
+  const { playerStats, loading: playerloading, error: playerError} = useNHLPlayerData(teamID, year)
 
   const handleYearChange = (e) => {
     setYear(e.target.value);
@@ -148,6 +151,23 @@ export default function NHLPage() {
               teamID={teamID}
             />
           </Box>
+
+          <Box
+            style={{
+              marginTop: '40px',
+              marginBottom: '40px',
+              marginLeft: '20px',
+              marginRight: '20px',
+              width: 'auto',
+              overflowX: 'auto',
+              borderRadius: '6px',
+              border: 'solid 1px',
+              boxSizing: 'border-box',
+            }}
+          >
+            <NHLPlayerTable playerStats={playerStats} />
+          </Box>
+
         </div>
       ) : null}
 

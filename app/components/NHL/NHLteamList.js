@@ -16,7 +16,7 @@ const NHLTeamList = ({ teamNames, handleTeamChangeFromList }) => {
   );
 
   // Split divisions into rows of four
-  const divisionsPerRow = 2;
+  const divisionsPerRow = 4;
   const divisionRows = [];
   for (let i = 0; i < divisionsWithTeams.length; i += divisionsPerRow) {
     divisionRows.push(divisionsWithTeams.slice(i, i + divisionsPerRow));
@@ -41,6 +41,11 @@ const NHLTeamList = ({ teamNames, handleTeamChangeFromList }) => {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             {teams.map((teamObj) => (
               <div key={teamObj.id} style={{ display: 'flex', alignItems: 'center', margin: '5px 0' }}>
+                <img
+                  src={`/images/nhl_logos/${teamObj.market.replace(/\s+/g, '-')}-${teamObj.name.replace(/\s+/g, '-')}-01.svg`}
+                  alt={`${teamObj.name} Logo`}
+                  style={{ width: '30px', height: '30px', marginRight: '10px' }}
+                />
                 <Typography
                   variant="body1"
                   component="a"

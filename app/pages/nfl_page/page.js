@@ -8,7 +8,6 @@ import useNFLTeamData from '../../hooks/useNFLTeamData';
 import useNFLTeamNamesData from '../../hooks/useNFLTeamNamesData';
 import useNFLTeamStandingsData from '../../hooks/useNFLTeamStandingsData';
 import useNFLPlayerData from '../../hooks/useNFLPlayerData';
-import { nflTeams } from '@/app/data/nflTeams';
 import {
   Box,
   FormControl,
