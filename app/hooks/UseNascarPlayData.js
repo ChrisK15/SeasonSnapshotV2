@@ -13,7 +13,7 @@ export default function UseMlsSeasonsData() {
   const [selectedDriver, setSelectedDriver] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [year, setYear] = useState('2024');
-  const [showEntireTable, setShowEntireTable] = useState(true); // Show entire table by default
+  const [showEntireTable, setShowEntireTable] = useState(true); 
   const [error, setError] = useState('');
 
   useEffect(() => {
