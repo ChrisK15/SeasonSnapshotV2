@@ -134,7 +134,7 @@ export default function UseMlsSeasonsData() {
                 }}
               >
                 <img
-                  src={`/images/nascar_logos/${countryName.toLowerCase()}.jpg`}
+                  src={`/images/nascar_team_logos/${countryName.toLowerCase()}.svg`}
                   alt={`${countryName} logo`}
                   style={{
                     width: '40px',
