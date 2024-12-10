@@ -11,7 +11,7 @@ const useNFLTeamStandingsData = (year) => {
       setLoading(true);
       try {
         // Make an API request using axios
-        const standingsResponse = await axios.post('/api/proxy/nflTeamStandings', {
+        const standingsResponse = await axios.post('/api/proxy/NFL/nflTeamStandings', {
           year: year,
         });
 

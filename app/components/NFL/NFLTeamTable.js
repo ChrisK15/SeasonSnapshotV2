@@ -12,7 +12,7 @@ import {
 import {
   displayedTeamColumns,
   teamColumnNameMap,
-} from '../data/tableNFLTeamColumns';
+} from '../../data/NFL/tableNFLTeamColumns';
 
 const TeamTable = ({ teamStats, teamStandings, year, teamID }) => {
   // Function to get Wins/Losses

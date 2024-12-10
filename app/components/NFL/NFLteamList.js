@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@mui/material';
-import { nflTeams } from '@/app/data/nflTeams';
+import { nflTeams } from '@/app/data/NFL/nflTeams';
 
 const NFLTeamList = ({ teamNames, handleTeamChangeFromList }) => {
   // Group the divisions

@@ -10,7 +10,7 @@ const usePlayerData = (teamID, year) => {
     const fetchPlayerData = async () => {
       setLoading(true);
       try {
-        const response = await axios.post('/api/proxy/teamStats', {
+        const response = await axios.post('/api/proxy/NBA/teamStats', {
           teamID: teamID,
           year: year,
         });

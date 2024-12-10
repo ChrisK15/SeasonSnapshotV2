@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { nbaTeams } from '../data/teams';
-import { yearList } from '../data/years';
+import { nflTeams } from '../../data/NFL/nflTeams';
+import { yearList } from '../../data/years';
 
-const useTeamNamesData = () => {
+const useNFLTeamNamesData = () => {
   const [teamNames, setTeamNames] = useState([]);
   const [yearNumbers, setYearNumbers] = useState([]);
   const [error, setError] = useState(null);
@@ -12,15 +12,13 @@ const useTeamNamesData = () => {
   useEffect(() => {
     const fetchTeamNames = async () => {
       try {
-        const response = await axios.get('/api/proxy/teamNames/');
-
+        const response = await axios.get('/api/proxy/NFL/nflTeams/');
         const filteredTeams = response.data.filter((team) =>
-          nbaTeams.some((nbaTeam) => nbaTeam.name === team.market)
+          nflTeams.some((NFLTeam) => NFLTeam.id === team.id)
         );
-
         setTeamNames(filteredTeams);
       } catch (error) {
-        console.error('Error fetching team names:', error.message);
+        console.error('Error fetching NFL teams:', error.message);
         setError(error);
       }
     };
@@ -29,11 +27,11 @@ const useTeamNamesData = () => {
       setYearNumbers(yearList);
     };
 
-    fetchTeamNames();
     fetchYearNumbers();
+    fetchTeamNames();
   }, []);
 
   return { teamNames, yearNumbers, error };
 };
 
-export default useTeamNamesData;
+export default useNFLTeamNamesData;

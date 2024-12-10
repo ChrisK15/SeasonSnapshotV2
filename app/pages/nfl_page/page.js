@@ -1,13 +1,13 @@
 'use client';
 
-import TeamTable from '../../components/NFLTeamTable';
-import NFLPlayerTable from '@/app/components/NFLPlayerTable';
-import NFLTeamList from '@/app/components/NFLteamList';
+import TeamTable from '../../components/NFL/NFLTeamTable';
+import NFLPlayerTable from '@/app/components/NFL/NFLPlayerTable';
+import NFLTeamList from '@/app/components/NFL/NFLteamList';
 import React, { useState, useEffect } from 'react';
-import useNFLTeamData from '../../hooks/useNFLTeamData';
-import useNFLTeamNamesData from '../../hooks/useNFLTeamNamesData';
-import useNFLTeamStandingsData from '../../hooks/useNFLTeamStandingsData';
-import useNFLPlayerData from '../../hooks/useNFLPlayerData';
+import useNFLTeamData from '../../hooks/NFL/useNFLTeamData';
+import useNFLTeamNamesData from '../../hooks/NFL/useNFLTeamNamesData';
+import useNFLTeamStandingsData from '../../hooks/NFL/useNFLTeamStandingsData';
+import useNFLPlayerData from '../../hooks/NFL/useNFLPlayerData';
 import {
   Box,
   FormControl,

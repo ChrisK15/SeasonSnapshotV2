@@ -11,7 +11,7 @@ import {
 import {
   displayedPlayerColumns,
   playerColumnNameMap,
-} from '../data/tablePlayerColumns';
+} from '../../data/NBA/tablePlayerColumns';
 
 const PlayerTable = ({ playerStats }) => {
   const generatePlayerTableColumn = (data) => {
