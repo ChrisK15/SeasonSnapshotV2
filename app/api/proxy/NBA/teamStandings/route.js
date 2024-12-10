@@ -26,7 +26,6 @@ export async function POST(req) {
         );
 
         const teamStandings = teamStandingsResponse.data;
-        console.log(teamStandings);
         return NextResponse.json(teamStandings);
     } catch (error) {
         return NextResponse.json(
