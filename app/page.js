@@ -1,17 +1,9 @@
 'use client';
 import { Button, Typography, Grid } from '@mui/material';
 import Link from 'next/link';
-import React, {useState} from 'react';
+import React from 'react';
 
 export default function Home() {
-  // State to manage the visibility of the league buttons
-  const [showCategories, setShowCategories] = useState(false);
-
-  // Function to show the league buttons when "Get Started" is clicked
-  const handleGetStartedClick = () => {
-    setShowCategories(true);
-  };
-
   return (
     <div
       style={{
@@ -49,77 +41,77 @@ export default function Home() {
           </Typography>
         </Grid>
 
-        {/* Get Started Button */}
+        {/* Pick a Sport Message */}
         <Grid item xs={12}>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleGetStartedClick}
+          <Typography
+            variant="h4"
+            style={{ color: 'white', marginTop: '40px', marginBottom: '20px' }}
           >
-            Get Started
-          </Button>
+            Pick a sport to get started.
+          </Typography>
         </Grid>
 
-        {/* League Buttons (appear after Get Started is clicked) */}
-        {showCategories && (
-          <Grid
-            container
-            item
-            xs={12}
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-          >
-            {/* NBA Button */}
-            <Grid item>
-              <Link href="/pages/nba_page" passHref>
-                <Button 
-                  variant="contained" 
-                  size="large" 
-                  style={{ backgroundColor: "#F57C00", color: "#FFFFFF" }}
-                  >
-                  NBA
-                </Button>
-              </Link>
-            </Grid>
+        {/* League Buttons */}
+        <Grid
+          container
+          item
+          xs={12}
+          spacing={2}
+          justifyContent="center"
+          alignItems="center"
+        >
+          {/* NBA Button */}
+          <Grid item>
+            <Link href="/pages/nba_page" passHref>
+              <Button
+                variant="contained"
+                size="large"
+                style={{ backgroundColor: "#F57C00", color: "#FFFFFF" }}
+              >
+                NBA
+              </Button>
+            </Link>
+          </Grid>
 
-            {/* MLB Button */}
-            <Grid item>
+          {/* MLB Button */}
+          <Grid item>
             <Link href="/pages/mlb_page" passHref>
-              <Button 
-                variant="contained" 
-                size="large" 
-                style={{ backgroundColor: "#388E3C", color: "#FFFFFF" }}>
+              <Button
+                variant="contained"
+                size="large"
+                style={{ backgroundColor: "#388E3C", color: "#FFFFFF" }}
+              >
                 MLB
               </Button>
-              </Link>
-            </Grid>
+            </Link>
+          </Grid>
 
-            {/* NFL Button */}
-            <Grid item>
+          {/* NFL Button */}
+          <Grid item>
             <Link href="/pages/nfl_page" passHref>
-              <Button 
-                variant="contained" 
-                size="large" 
-                color="secondary">
+              <Button
+                variant="contained"
+                size="large"
+                color="secondary"
+              >
                 NFL
               </Button>
-              </Link>
-            </Grid>
+            </Link>
+          </Grid>
 
-            {/* NHL Button */}
-            <Grid item>
+          {/* NHL Button */}
+          <Grid item>
             <Link href="/pages/nhl_page" passHref>
-              <Button 
-                variant="contained" 
-                size="large" 
-                style={{ backgroundColor: "#00BFFF", color: "#FFFFFF" }}>
+              <Button
+                variant="contained"
+                size="large"
+                style={{ backgroundColor: "#00BFFF", color: "#FFFFFF" }}
+              >
                 NHL
               </Button>
-              </Link>
-            </Grid>
+            </Link>
           </Grid>
-        )}
+        </Grid>
       </Grid>
     </div>
   );
