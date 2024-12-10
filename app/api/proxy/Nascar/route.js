@@ -17,8 +17,6 @@ export async function POST(req) {
       throw new Error('No data returned from SportsRadar API');
     }
 
-    console.log(response.data.drivers);
-
     return new Response(JSON.stringify(response.data), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
