@@ -12,12 +12,12 @@ export const displayedTeamColumns = [
 
 export const teamColumnNameMap = {
   season: 'Season',
-  games_played: 'Games Played',
-  wins: 'Wins',
-  losses: 'Losses',
-  touchdowns: 'Touchdowns',
-  rushing_yards: 'Rushing Yards',
-  passing_yards: 'Passing Yards',
-  penalties: 'Penalties',
-  penalty_yards: 'Penalty Yards',
+  games_played: 'GP',
+  wins: 'W',
+  losses: 'L',
+  touchdowns: 'TD',
+  rushing_yards: 'RY',
+  passing_yards: 'PY',
+  penalties: 'PEN',
+  penalty_yards: 'PENY',
 };
