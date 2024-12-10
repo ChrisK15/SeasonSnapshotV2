@@ -111,6 +111,19 @@ export default function Home() {
               </Button>
             </Link>
           </Grid>
+
+          {/* NASCAR Button */}
+          <Grid item>
+            <Link href="/pages/nascar_page" passHref>
+              <Button
+                variant="contained"
+                size="large"
+                style={{ backgroundColor: "#FF0000", color: "#FFFFFF" }}
+              >
+                NASCAR
+              </Button>
+            </Link>
+          </Grid>
         </Grid>
       </Grid>
     </div>
