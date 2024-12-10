@@ -1,0 +1,119 @@
+/* General Styles for the Table */
+.table-container {
+  width: 100%;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Ensures the border-radius is visible */
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden; /* Ensures rounded corners are visible */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 15px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.stats-table th {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.stats-table td {
+  background-color: #f9f9f9;
+}
+
+.stats-table tr:nth-child(even) td {
+  background-color: #f1f1f1;
+}
+
+.stats-table tr:hover td {
+  background-color: #e2e2e2;
+}
+
+.stats-table td a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.stats-table td a:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+  .stats-table {
+    font-size: 12px;
+  }
+  .stats-table th,
+  .stats-table td {
+    padding: 10px;
+  }
+}
+
+select {
+  padding: 8px 12px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+select option {
+  padding: 8px;
+}
+
+/* Styling for the container box */
+.box-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.box-container h1 {
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:focus {
+  outline: none;
+}

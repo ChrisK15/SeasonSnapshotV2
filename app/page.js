@@ -70,7 +70,7 @@ export default function Home() {
             justifyContent="center"
             alignItems="center"
           >
-            {/* NBA Button */}
+
             <Grid item>
               <Link href="/pages/nba_page" passHref>
                 <Button 
@@ -79,6 +79,18 @@ export default function Home() {
                   style={{ backgroundColor: "#F57C00", color: "#FFFFFF" }}
                   >
                   NBA
+                </Button>
+              </Link>
+            </Grid>
+            {/* NBA Button */}
+            <Grid item>
+              <Link href="/pages/nascar_page" passHref>
+                <Button 
+                  variant="contained" 
+                  size="large" 
+                  style={{ backgroundColor: "Red", color: "#FFFFFF" }}
+                  >
+                  Nascar
                 </Button>
               </Link>
             </Grid>
