@@ -60,7 +60,7 @@ export default function UseMlsSeasonsData() {
   const handleCountryClick = (countryName) => {
     setSelectedCountry(countryName);
     setSelectedDriver('');
-    setShowEntireTable(true); // Show entire table when a country is selected
+    setShowEntireTable(true); 
   };
 
   const handleYearChange = (event) => {
@@ -69,14 +69,14 @@ export default function UseMlsSeasonsData() {
 
   const handleDriverSelect = (driverId) => {
     setSelectedDriver(driverId);
-    setShowEntireTable(false); // Show only the selected driver
+    setShowEntireTable(false); 
   };
 
   const handleReset = () => {
     setSelectedCountry('');
     setSelectedDriver('');
     setYear('2024');
-    setShowEntireTable(true); // Show entire table on reset
+    setShowEntireTable(true); 
   };
 
   if (loading) {
