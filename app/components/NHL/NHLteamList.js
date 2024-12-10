@@ -30,6 +30,8 @@ const NHLTeamList = ({ teamNames, handleTeamChangeFromList }) => {
         justifyContent: 'center',
         marginBottom: '20px',
         width: '100%',
+        backgroundColor: 'black',
+        color: 'white',
       }}
     >
       {divisionRow.map(([division, teams]) => (

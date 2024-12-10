@@ -67,7 +67,6 @@ export default function TeamList({
                 textAlign: 'center',
                 marginBottom: '10px',
                 fontWeight: 'bold',
-                color: '#333',
               }}
             >
               {division}

@@ -58,16 +58,16 @@ export default function NFLPage() {
         flexDirection: 'column',
         alignItems: 'center',
         paddingTop: '20px',
+        backgroundColor: 'black',
+        color: 'white',
+        minHeight: '100vh',
       }}
     >
       <Button
-        variant="outlined"
+        variant="contained"
         size="medium"
-        color="primary"
         onClick={() => (window.location.href = '/')}
         style={{
-          color: 'black',
-          borderColor: 'black',
           position: 'absolute',
           top: '20px',
           left: '20px',
@@ -76,28 +76,41 @@ export default function NFLPage() {
         Home
       </Button>
   
-      <Typography variant="h1">Season Snapshot</Typography>
+      <Typography variant="h1" style={{ color: 'white' }}>Season Snapshot - NFL</Typography>
   
       {!teamID || !year ? (
         <div
           style={{
             display: 'flex',
             justifyContent: 'center',
-            marginBottom: '20px',
+            marginTop: '30px',
+            marginBottom: '30px',
           }}
         >
-          <FormControl sx={{ minWidth: 100 }}>
-            <InputLabel id="year-select-label">Year</InputLabel>
+          <FormControl sx={{ minWidth: 120, borderColor: 'white', borderWidth: 1, borderStyle: 'solid', borderRadius: 1, color: 'white', backgroundColor: 'black' }}>
+            <InputLabel id="year-select-label" style={{ color: 'white' }}>Year</InputLabel>
             <Select
               labelId="year-select-label"
               id="year-select"
               value={year}
               onChange={handleYearChange}
-              label="Years"
+              label="Year"
+              style={{ color: 'white', backgroundColor: 'black', borderBottom: '1px solid white' }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    backgroundColor: 'black',
+                    color: 'white',
+                    borderColor: 'white',
+                    borderWidth: 1,
+                    borderStyle: 'solid',
+                  }
+                }
+              }}
             >
-              {yearNumbers.map((yearObj) => (
-                <MenuItem key={yearObj} value={yearObj}>
-                  {yearObj}
+              {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                <MenuItem key={year} value={year} style={{ color: 'white', backgroundColor: 'black', '&:hover': { backgroundColor: '#555' } }}>
+                  {year}
                 </MenuItem>
               ))}
             </Select>
@@ -115,10 +128,6 @@ export default function NFLPage() {
             width: '100%',
           }}
         >
-          <Typography variant="h6" style={{ marginBottom: '10px', textAlign: 'center' }}>
-            NFL
-          </Typography>
-          
         </div>
       ) : null}
 
