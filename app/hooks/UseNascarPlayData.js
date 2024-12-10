@@ -96,11 +96,22 @@ export default function UseMlsSeasonsData() {
           <Box display="flex" justifyContent="center" marginBottom="20px">
             <h1 style={{ paddingTop: '350px' }}>Pick Your Favorite NASCAR Team Here</h1>
           </Box>
-              <Box>
-              <Button variant="contained" size="large" href=''>
-                Home
-              </Button>
-              </Box>
+              
+          <Button
+        variant="contained"
+        size="medium"
+        onClick={() => (window.location.href = '/')}
+        style={{
+          position: 'absolute',
+          top: '20px',
+          left: '20px',
+        }}
+      >
+        Home
+      </Button>
+
+
+
           <Box
             display="flex"
             flexWrap="wrap"
